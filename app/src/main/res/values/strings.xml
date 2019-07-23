@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Lc Lab</string>
+    <!--全局应用设置-->
+    <string name="app_name">低卡实验室</string>
+    <!--主页活动设置-->
+    <string name="navigation_item_one">首页</string>
+    <string name="navigation_item_two">社区</string>
+    <string name="navigation_item_three">商城</string>
+    <string name="navigation_item_four">我的</string>
 </resources>

@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <!--全局颜色设置-->
+    <color name="colorPrimary">#0ABEFF</color>
+    <color name="colorPrimaryDark">#0ABEFF</color>
+    <color name="colorAccent">#0ABEFF</color>
+    <!--三角形搭配-->
+    <color name="colorPrimaryExtra">#FF2C00</color>
+    <!--互补色-->
+    <color name="colorPrimaryPlus">#FF8500</color>
+    <!--背景色-->
+    <color name="colorShadow">#f5f5f5</color>
+    <!--分割线颜色-->
+    <color name="colorLine">#eeeeee</color>
+
+    <!--常用白色-->
+    <color name="white">#FFFFFF</color>
+
+
+    <!--商城颜色设置-->
+    <!--深色字体-->
+    <color name="colorBold">#333333</color>
+    <!--浅色字体-->
+    <color name="colorLight">#999999</color>
+    <!--警告字体-->
+    <color name="colorWarning">#D81B60</color>
+    <color name="colorWarningBackground">#F5D4D4</color>
+    <!--购物车卡片颜色-->
+    <color name="colorCard">#000000</color>
+
+
 </resources>
