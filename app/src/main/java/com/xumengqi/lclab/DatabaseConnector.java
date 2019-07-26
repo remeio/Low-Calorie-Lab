@@ -156,14 +156,15 @@ public class DatabaseConnector {
         }
         return dish;
     }
+
     /** 根据账户名来获取账户信息 */
-    public User getUserByAccount(String account) {
+    public User getUserByAccount(String account, String password) {
         String table = "lc_lab_user_information_table";
-        notifyState("在表（" + table + "）中查找account为（" + account + "）的首次行，并返回User...");
+        notifyState("正在表（" + table + "）中查找account为（" + account + "）的首次行，并返回User...");
         User user = null;
         if (connection != null) {
             try {
-                String queryOneInTableSQL = "select * from " + table + " where account = " + account;
+                String queryOneInTableSQL = "select * from " + table + " where account = " + account + " and password = '" + password + "'";
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(queryOneInTableSQL);
                 if (resultSet.first()) {
@@ -190,7 +191,7 @@ public class DatabaseConnector {
             }
         }
         if (user == null) {
-            notifyState("在表（" + table + "）中没有找到account为（" + account + "）的行，或未连接到数据库");
+            notifyState("在表（" + table + "）中没有找到account为（" + account + "）的行，或未连接到数据库，或密码不正确");
         } else {
             notifyState("在表（" + table + "）中找到了account为（" + account + "）的行，返回User成功");
         }
@@ -198,9 +199,10 @@ public class DatabaseConnector {
     }
 
     /** 更新账户信息 */
-    public void updateUser(
+    public Boolean updateUser(
             String account,
             String password,
+            String passwordNew,
             double height_cm,
             double weight_kg,
             Date birthday,
@@ -211,34 +213,37 @@ public class DatabaseConnector {
         String table = "lc_lab_user_information_table";
         notifyState("正在表（" + table + "）中查找account为（" + account + "）的首次行，并更新除id，account和notes外的其他信息...");
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("update " + table + " set password=?, height_cm=?, weight_kg=?, birthday=?, gender=?, waist_to_hip_ratio=?, exercise_volume=?, dietary_target=? where account = ?");
-            preparedStatement.setString(1, password);
-            preparedStatement.setDouble(2, height_cm);
-            preparedStatement.setDouble(3, weight_kg);
-            preparedStatement.setDate(4, new java.sql.Date(birthday.getTime()));
-            preparedStatement.setString(5, gender);
-            preparedStatement.setDouble(6, waist_to_hip_ratio);
-            preparedStatement.setString(7, exercise_volume);
-            preparedStatement.setString(8, dietary_target);
-            preparedStatement.setString(9, account);
-            if (preparedStatement.executeUpdate() == 1) {
-                notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行成功");
-            } else {
-                notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行失败");
+            if (connection != null) {
+                PreparedStatement preparedStatement = connection.prepareStatement("update " + table + " set password=?, height_cm=?, weight_kg=?, birthday=?, gender=?, waist_to_hip_ratio=?, exercise_volume=?, dietary_target=? where account = ? and password = ?");
+                preparedStatement.setString(1, passwordNew);
+                preparedStatement.setDouble(2, height_cm);
+                preparedStatement.setDouble(3, weight_kg);
+                preparedStatement.setDate(4, new java.sql.Date(birthday.getTime()));
+                preparedStatement.setString(5, gender);
+                preparedStatement.setDouble(6, waist_to_hip_ratio);
+                preparedStatement.setString(7, exercise_volume);
+                preparedStatement.setString(8, dietary_target);
+                preparedStatement.setString(9, account);
+                preparedStatement.setString(10, password);
+                if (preparedStatement.executeUpdate() == 1) {
+                    preparedStatement.close();
+                    notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行成功");
+                    return true;
+                } else {
+                    preparedStatement.close();
+                    notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行失败，没有找到");
+                    return false;
+                }
             }
-            preparedStatement.close();
+            else {
+                notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行失败，没有连接到数据库");
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-    /* 获取图片，首先在本地寻找，若没有找到，则从云端寻找 */
-    private Bitmap getPictureByIdOrUrl(Context context, int id, String fileName) {
-        notifyState("正在获取（" + fileName + "）的图像...");
-        final String URL = "http://106.15.39.96/media/food_information_table_images/";
-        String drawableName = "food_picture" + id;
-        int resId = context.getResources().getIdentifier(drawableName , "drawable", Objects.requireNonNull(context).getPackageName());
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
-        return bitmap == null ? getHttpBitmap(context, URL + fileName + ".jpg") : bitmap;
+        notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行失败，其他原因");
+        return false;
     }
 
     /** 注册一个新账户 */
@@ -268,6 +273,7 @@ public class DatabaseConnector {
         }
         return false;
     }
+
     /** 登录一个账户 */
     public Boolean loginAccount(String account, String password) {
         String table = "lc_lab_user_information_table";
@@ -288,9 +294,17 @@ public class DatabaseConnector {
         return false;
     }
 
+    /** 获取图片，首先在本地寻找，若没有找到，则从云端寻找 */
+    private Bitmap getPictureByIdOrUrl(Context context, int id, String fileName) {
+        final String URL = "http://106.15.39.96/media/food_information_table_images/";
+        String drawableName = "food_picture" + id;
+        int resId = context.getResources().getIdentifier(drawableName , "drawable", Objects.requireNonNull(context).getPackageName());
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
+        return bitmap == null ? getHttpBitmap(context, URL + fileName + ".jpg") : bitmap;
+    }
+
     /** 从网址获取图片，并配置没有找到时显示的图片 */
     private Bitmap getHttpBitmap(Context context, String url) {
-        notifyState("正在从（" + url + "）中获取图像...");
         URL myFileURL;
         Bitmap bitmap = null;
         try {

@@ -42,7 +42,7 @@
             android:id="@+id/rv_shopping_cart_goods"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="50dp"
             android:layout_weight="1"
             android:visibility="gone" />
 
@@ -50,8 +50,8 @@
             android:id="@+id/iv_shopping_cart_null"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="60dp"
             android:layout_weight="1"
+            android:layout_marginBottom="50dp"
             android:padding="80dp"
             app:srcCompat="@drawable/no_more" />
 

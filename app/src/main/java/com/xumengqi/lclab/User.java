@@ -91,4 +91,44 @@ public class User {
     public String getNotes() {
         return notes;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setHeight_cm(double height_cm) {
+        this.height_cm = height_cm;
+    }
+
+    public void setWeight_kg(double weight_kg) {
+        this.weight_kg = weight_kg;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setWaist_to_hip_ratio(double waist_to_hip_ratio) {
+        this.waist_to_hip_ratio = waist_to_hip_ratio;
+    }
+
+    public void setExercise_volume(String exercise_volume) {
+        this.exercise_volume = exercise_volume;
+    }
+
+    public void setDietary_target(String dietary_target) {
+        this.dietary_target = dietary_target;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public void setPicture(Bitmap picture) {
+        this.picture = picture;
+    }
 }

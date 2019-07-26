@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
 
@@ -198,9 +197,7 @@ public class StoreFragment extends Fragment {
             @Override
             public void run() {
                 /* 发送正在加载信息，目的是给用户反馈 */
-                Message messageLoading = new Message();
-                messageLoading.what = LOADING_DISH_LIST;
-                handler.sendMessage(messageLoading);
+                handler.sendMessage(theMessage(LOADING_DISH_LIST));
                 /* 加载数据 */
                 dishList = new ArrayList<>();
                 DatabaseConnector databaseConnector = new DatabaseConnector(getContext());
@@ -210,22 +207,18 @@ public class StoreFragment extends Fragment {
                 /* 根据数据来确认如何响应，并发送相应信息 */
                 if (dishList.size() != 0) {
                     /* 通知加载成功 */
-                    Message message = new Message();
-                    message.what = LOAD_DISH_LIST_SUCCESSFULLY;
-                    handler.sendMessage(message);
+                    handler.sendMessage(theMessage(LOAD_DISH_LIST_SUCCESSFULLY));
                 }
                 else {
-                    Message message = new Message();
                     NetworkChecker networkChecker = new NetworkChecker(getContext());
                     if (networkChecker.isConnecting()) {
                         /* 内部数据库为空，属于数据库问题 */
-                        message.what = LOAD_DISH_LIST_NULL_DATA;
+                        handler.sendMessage(theMessage(LOAD_DISH_LIST_NULL_DATA));
                     }
                     else {
                         /* 断开网络，故加载失败 */
-                        message.what = LOAD_DISH_LIST_UNSUCCESSFULLY;
+                        handler.sendMessage(theMessage(LOAD_DISH_LIST_UNSUCCESSFULLY));
                     }
-                    handler.sendMessage(message);
                 }
             }
         }).start();
@@ -235,5 +228,10 @@ public class StoreFragment extends Fragment {
     public static void MoveToPosition(GridLayoutManager gridLayoutManager, RecyclerView mRecyclerView, int n) {
         mRecyclerView.scrollToPosition(n);
         gridLayoutManager.scrollToPositionWithOffset(n, 0);
+    }
+    private Message theMessage(int what) {
+        Message message = new Message();
+        message.what = what;
+        return message;
     }
 }

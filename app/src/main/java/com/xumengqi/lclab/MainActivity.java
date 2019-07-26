@@ -37,7 +37,6 @@ public class MainActivity extends BaseActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_item_one:
                         if (!(lastShowFragment == ONE_FRAGMENT)) {
-                            /* 隐藏当前帧，添加并显示下一帧 */
                             changeShowFragment(lastShowFragment, ONE_FRAGMENT);
                         }
                         return true;
