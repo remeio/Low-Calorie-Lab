@@ -15,6 +15,7 @@
 
     <!--常用白色-->
     <color name="white">#FFFFFF</color>
+    <color name="colorToast">#333333</color>
 
 
     <!--商城颜色设置-->
@@ -27,6 +28,12 @@
     <color name="colorWarningBackground">#F5D4D4</color>
     <!--购物车卡片颜色-->
     <color name="colorCard">#000000</color>
+
+    <!--登录界面颜色-->
+    <color name="colorLoginLine">#dededf</color>
+    <color name="account_input_bg_color">#33ffffff</color>
+    <color name="login_input_active">#0abeff</color>
+    <color name="transparent">#00000000</color>
 
 
 </resources>

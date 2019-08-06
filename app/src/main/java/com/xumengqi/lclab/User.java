@@ -4,131 +4,135 @@ import android.graphics.Bitmap;
 
 import java.util.Date;
 
-public class User {
+/**
+ * @author xumengqi
+ * @date 2019/08/04
+ */
+class User {
     private int id;
     private String account;
     private String password;
     private Bitmap picture;
-    private double height_cm;
-    private double weight_kg;
+    private double height;
+    private double weight;
     private Date birthday;
     private String gender;
-    private double waist_to_hip_ratio;
-    private String exercise_volume;
-    private String dietary_target;
+    private double waistToHipRatio;
+    private String exerciseVolume;
+    private String dietaryTarget;
     private String notes;
-    public User(
+    User(
             int id,
             String account,
             String password,
             Bitmap picture,
-            double height_cm,
-            double weight_kg,
+            double height,
+            double weight,
             Date birthday,
             String gender,
-            double waist_to_hip_ratio,
-            String exercise_volume,
-            String dietary_target,
+            double waistToHipRatio,
+            String exerciseVolume,
+            String dietaryTarget,
             String notes) {
         this.id = id;
         this.account = account;
         this.password = password;
         this.picture = picture;
-        this.height_cm = height_cm;
-        this.weight_kg = weight_kg;
+        this.height = height;
+        this.weight = weight;
         this.birthday = birthday;
         this.gender = gender;
-        this.waist_to_hip_ratio = waist_to_hip_ratio;
-        this.exercise_volume = exercise_volume;
-        this.dietary_target = dietary_target;
+        this.waistToHipRatio = waistToHipRatio;
+        this.exerciseVolume = exerciseVolume;
+        this.dietaryTarget = dietaryTarget;
         this.notes = notes;
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
-    public String getAccount() {
+    String getAccount() {
         return account;
     }
 
-    public String getPassword() {
+    String getPassword() {
         return password;
     }
 
-    public Bitmap getPicture() {
+    Bitmap getPicture() {
         return picture;
     }
 
-    public double getHeight_cm() {
-        return height_cm;
+    double getHeight() {
+        return height;
     }
 
-    public double getWeight_kg() {
-        return weight_kg;
+    double getWeight() {
+        return weight;
     }
 
-    public Date getBirthday() {
+    Date getBirthday() {
         return birthday;
     }
 
-    public String getGender() {
+    String getGender() {
         return gender;
     }
 
-    public double getWaist_to_hip_ratio() {
-        return waist_to_hip_ratio;
+    double getWaistToHipRatio() {
+        return waistToHipRatio;
     }
 
-    public String getDietary_target() {
-        return dietary_target;
+    String getDietaryTarget() {
+        return dietaryTarget;
     }
 
-    public String getExercise_volume() {
-        return exercise_volume;
+    String getExerciseVolume() {
+        return exerciseVolume;
     }
 
-    public String getNotes() {
+    String getNotes() {
         return notes;
     }
 
-    public void setPassword(String password) {
+    void setPassword(String password) {
         this.password = password;
     }
 
-    public void setHeight_cm(double height_cm) {
-        this.height_cm = height_cm;
+    void setHeight(double height) {
+        this.height = height;
     }
 
-    public void setWeight_kg(double weight_kg) {
-        this.weight_kg = weight_kg;
+    void setWeight(double weight) {
+        this.weight = weight;
     }
 
-    public void setBirthday(Date birthday) {
+    void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
-    public void setGender(String gender) {
+    void setGender(String gender) {
         this.gender = gender;
     }
 
-    public void setWaist_to_hip_ratio(double waist_to_hip_ratio) {
-        this.waist_to_hip_ratio = waist_to_hip_ratio;
+    void setWaistToHipRatio(double waistToHipRatio) {
+        this.waistToHipRatio = waistToHipRatio;
     }
 
-    public void setExercise_volume(String exercise_volume) {
-        this.exercise_volume = exercise_volume;
+    void setExerciseVolume(String exerciseVolume) {
+        this.exerciseVolume = exerciseVolume;
     }
 
-    public void setDietary_target(String dietary_target) {
-        this.dietary_target = dietary_target;
+    void setDietaryTarget(String dietaryTarget) {
+        this.dietaryTarget = dietaryTarget;
     }
 
-    public void setNotes(String notes) {
+    void setNotes(String notes) {
         this.notes = notes;
     }
 
-    public void setPicture(Bitmap picture) {
+    void setPicture(Bitmap picture) {
         this.picture = picture;
     }
 }

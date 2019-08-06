@@ -15,13 +15,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * @author xumengqi
+ * @date 2019/08/04
+ */
 public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
     private View view;
     private List<Dish> dishList;
     private SparseArray<Goods> goodsSparseArray;
 
     /** 构造方法，传入视图是为了可能使用上下文和视图 */
-    public DishAdapter(View view, List<Dish> dishList, SparseArray<Goods> goodsSparseArray) {
+    DishAdapter(View view, List<Dish> dishList, SparseArray<Goods> goodsSparseArray) {
         this.view = view;
         this.dishList = dishList;
         this.goodsSparseArray = goodsSparseArray;
@@ -29,19 +33,19 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
 
     /** 获取组件 */
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private CardView cv_dish;
-        private ImageView iv_dish;
-        private TextView tv_dish_name, tv_dish_price, tv_dish_category, tv_dish_calorie;
-        private ImageButton ib_add_dish;
-        public ViewHolder(View view) {
+        private CardView cvDish;
+        private ImageView ivDish;
+        private TextView tvDishName, tvDishPrice, tvDishCategory, tvDishCalorie;
+        private ImageButton ibDishAddDish;
+        ViewHolder(View view) {
             super(view);
-            cv_dish = view.findViewById(R.id.cv_dish);
-            iv_dish = view.findViewById(R.id.iv_dish);
-            tv_dish_name = view.findViewById(R.id.tv_dish_name);
-            tv_dish_price = view.findViewById(R.id.tv_dish_price);
-            tv_dish_category = view.findViewById(R.id.tv_dish_category);
-            tv_dish_calorie = view.findViewById(R.id.tv_dish_calorie);
-            ib_add_dish = view.findViewById(R.id.ib_add_dish);
+            cvDish = view.findViewById(R.id.cv_dish);
+            ivDish = view.findViewById(R.id.iv_dish);
+            tvDishName = view.findViewById(R.id.tv_dish_name);
+            tvDishPrice = view.findViewById(R.id.tv_dish_price);
+            tvDishCategory = view.findViewById(R.id.tv_dish_category);
+            tvDishCalorie = view.findViewById(R.id.tv_dish_calorie);
+            ibDishAddDish = view.findViewById(R.id.ib_dish_add_dish);
         }
     }
 
@@ -60,14 +64,14 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
         /* 1.获取当前元素 */
         final Dish dish = dishList.get(i);
         /* 2.设置组件的内容 */
-        viewHolder.tv_dish_name.setText(dish.getName());
-        viewHolder.tv_dish_price.setText(("¥" + dish.getPrice()));
-        viewHolder.tv_dish_category.setText(dish.getCategory());
-        viewHolder.tv_dish_calorie.setText((dish.getCalorie_k_calorie() + "千卡"));
-        viewHolder.iv_dish.setImageBitmap(dish.getPicture());
+        viewHolder.tvDishName.setText(dish.getName());
+        viewHolder.tvDishPrice.setText(("¥" + dish.getPrice()));
+        viewHolder.tvDishCategory.setText(dish.getCategory());
+        viewHolder.tvDishCalorie.setText((dish.getCalorie() + "千卡"));
+        viewHolder.ivDish.setImageBitmap(dish.getPicture());
         /* 3.设置组件的功能 */
         /* 将被点击菜品加入购物车 */
-        viewHolder.ib_add_dish.setOnClickListener(new View.OnClickListener() {
+        viewHolder.ibDishAddDish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /* 数据的获取 */
@@ -85,7 +89,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
             }
         });
         /* 点击菜品进入详情页 */
-        viewHolder.cv_dish.setOnClickListener(new View.OnClickListener() {
+        viewHolder.cvDish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DishDetailActivity.class);
@@ -107,13 +111,13 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
     }
 
     /** 添加菜品后要进行总价格的更新 */
-    public void updatePrice() {
-        TextView tv_store_price = view.findViewById(R.id.tv_store_price);
+    private void updatePrice() {
+        TextView tvStorePrice = view.findViewById(R.id.tv_store_price);
         double price = 0;
         for (int i = 0; i < goodsSparseArray.size(); i++) {
             Goods goods = goodsSparseArray.valueAt(i);
             price += goods.getPrice() * goods.getCount();
         }
-        tv_store_price.setText(("¥" + price));
+        tvStorePrice.setText(("¥" + price));
     }
 }

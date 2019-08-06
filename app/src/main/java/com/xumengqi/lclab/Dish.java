@@ -2,93 +2,97 @@ package com.xumengqi.lclab;
 
 import android.graphics.Bitmap;
 
-public class Dish {
+/**
+ * @author xumengqi
+ * @date 2019/08/04
+ */
+class Dish {
     private int id;
     private String name;
     private Bitmap picture;
     private double price;
-    private double calorie_k_calorie;
+    private double calorie;
     private String category;
     private String ingredient;
-    private double carbohydrate_g;
-    private double fat_g;
-    private double protein_g;
-    private double dietary_fiber_g;
+    private double carbohydrate;
+    private double fat;
+    private double protein;
+    private double dietaryFiber;
     private String notes;
 
-    public Dish(
+     Dish(
             int id,
             String name,
             Bitmap picture,
             double price,
-            double calorie_k_calorie,
+            double calorie,
             String category,
             String ingredient,
-            double carbohydrate_g,
-            double fat_g,
-            double protein_g,
-            double dietary_fiber_g,
+            double carbohydrate,
+            double fat,
+            double protein,
+            double dietaryFiber,
             String notes) {
 
         this.id = id;
         this.name = name;
         this.picture = picture;
         this.price = price;
-        this.calorie_k_calorie = calorie_k_calorie;
+        this.calorie = calorie;
         this.category = category;
         this.ingredient = ingredient;
-        this.carbohydrate_g = carbohydrate_g;
-        this.fat_g = fat_g;
-        this.protein_g = protein_g;
-        this.dietary_fiber_g = dietary_fiber_g;
+        this.carbohydrate = carbohydrate;
+        this.fat = fat;
+        this.protein = protein;
+        this.dietaryFiber = dietaryFiber;
         this.notes = notes;
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public Bitmap getPicture() {
+    Bitmap getPicture() {
         return picture;
     }
 
-    public double getPrice() {
+    double getPrice() {
         return price;
     }
 
-    public double getCalorie_k_calorie() {
-        return calorie_k_calorie;
+    double getCalorie() {
+        return calorie;
     }
 
-    public String getCategory() {
+    String getCategory() {
         return category;
     }
 
-    public String getIngredient() {
+    String getIngredient() {
         return ingredient;
     }
 
-    public double getCarbohydrate_g() {
-        return carbohydrate_g;
+    double getCarbohydrate() {
+        return carbohydrate;
     }
 
-    public double getFat_g() {
-        return fat_g;
+    double getFat() {
+        return fat;
     }
 
-    public double getProtein_g() {
-        return protein_g;
+    double getProtein() {
+        return protein;
     }
 
-    public double getDietary_fiber_g() {
-        return dietary_fiber_g;
+    double getDietaryFiber() {
+        return dietaryFiber;
     }
 
-    public String getNotes() {
+    String getNotes() {
         return notes;
     }
 }

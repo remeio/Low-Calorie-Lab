@@ -22,7 +22,8 @@
                 android:id="@+id/ib_dish_detail_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
                 android:src="@drawable/back" />
@@ -40,7 +41,8 @@
             <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
                 android:visibility="invisible" />
@@ -79,22 +81,14 @@
             android:scaleType="fitCenter" />
 
         <TextView
-            android:id="@+id/tv_dish_detail_calorie_k_calorie"
+            android:id="@+id/tv_dish_detail_calorie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="start"
             android:textSize="16sp" />
         <TextView
-            android:id="@+id/tv_dish_detail_carbohydrate_g"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="start"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_dish_detail_fat_g"
+            android:id="@+id/tv_dish_detail_carbohydrate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -102,7 +96,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tv_dish_detail_protein_g"
+            android:id="@+id/tv_dish_detail_fat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -110,7 +104,15 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tv_dish_detail_dietary_fiber_g"
+            android:id="@+id/tv_dish_detail_protein"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="start"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_dish_detail_dietary_fiber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

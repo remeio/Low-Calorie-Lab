@@ -3,6 +3,7 @@ package com.xumengqi.lclab;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,21 +20,26 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * @author xumengqi
+ * @date 2019/08/04
+ */
 public class MineFragment extends Fragment implements View.OnClickListener {
-    private LinearLayout ll_mine_not_login, ll_mine_warning;
-    private ScrollView sv_mine_login;
-    private TextView tv_mine_account, tv_mine_height, tv_mine_weight, tv_mine_sex, tv_mine_birth, tv_mine_whr, tv_mine_exercise, tv_mine_goal;
-    private LinearLayout ll_mine_login, ll_mine_height, ll_mine_weight, ll_mine_sex, ll_mine_birth, ll_mine_whr, ll_mine_exercise, ll_mine_goal, ll_mine_activity, ll_mine_order_form, ll_mine_address, ll_mine_password, ll_mine_logout, ll_mine_about;
+    private LinearLayout llMineNotLogin, llMineWarning;
+    private ScrollView svMineLogin;
+    private TextView tvMineAccount, tvMineHeight, tvMineWeight, tvMineSex, tvMineBirth, tvMineWhr, tvMineExercise, tvMineGoal;
 
     private final int NOT_LOGIN = 100, LOGGING = 101, LOGIN_SUCCESSFULLY = 102, LOGIN_FAILED_BY_SYSTEM = 103, LOGIN_FAILED_BY_NETWORK = 104, MODIFIED_FAILED_BY_NETWORK = 105, MODIFIED_FAILED_BY_NOT_LOGIN = 106, MODIFIED_FAILED_BY_INVALID = 107;
     private User user;
@@ -45,59 +51,62 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             switch (msg.what) {
                 case NOT_LOGIN:
                     /* 没有登录 */
-                    sv_mine_login.setVisibility(View.GONE);
-                    ll_mine_not_login.setVisibility(View.VISIBLE);
-                    ll_mine_warning.setVisibility(View.GONE);
+                    svMineLogin.setVisibility(View.GONE);
+                    llMineNotLogin.setVisibility(View.VISIBLE);
+                    llMineWarning.setVisibility(View.GONE);
                     break;
                 case LOGGING:
                     /* 登录中 */
-                    sv_mine_login.setVisibility(View.VISIBLE);
-                    ll_mine_not_login.setVisibility(View.GONE);
-                    ll_mine_warning.setVisibility(View.GONE);
-                    tv_mine_account.setText((account + "(登录中...)"));
+                    svMineLogin.setVisibility(View.VISIBLE);
+                    llMineNotLogin.setVisibility(View.GONE);
+                    llMineWarning.setVisibility(View.GONE);
+                    tvMineAccount.setText(account);
                     break;
                 case LOGIN_SUCCESSFULLY:
-                    tv_mine_account.setText(account);
-                    if (user.getHeight_cm() != 0) {
-                        tv_mine_height.setText((user.getHeight_cm() + "cm"));
+                    tvMineAccount.setText(account);
+                    if (user.getHeight() != 0) {
+                        tvMineHeight.setText((user.getHeight() + "cm"));
                     }
-                    if (user.getWeight_kg() != 0) {
-                        tv_mine_weight.setText((user.getWeight_kg() + "kg"));
+                    if (user.getWeight() != 0) {
+                        tvMineWeight.setText((user.getWeight() + "kg"));
                     }
                     if (user.getGender() != null) {
-                        tv_mine_sex.setText(user.getGender());
+                        tvMineSex.setText(user.getGender());
                     }
                     if (user.getBirthday() != null) {
                         DateFormat dateFormat = SimpleDateFormat.getDateInstance();
                         String dateString = dateFormat.format(user.getBirthday());
-                        tv_mine_birth.setText(dateString);
+                        tvMineBirth.setText(dateString);
                     }
-                    if (user.getWaist_to_hip_ratio() != 0) {
-                        tv_mine_whr.setText((user.getWaist_to_hip_ratio() + ""));
+                    if (user.getWaistToHipRatio() != 0) {
+                        tvMineWhr.setText((user.getWaistToHipRatio() + ""));
                     }
-                    if (user.getExercise_volume() != null) {
-                        tv_mine_exercise.setText(user.getExercise_volume());
+                    if (user.getExerciseVolume() != null) {
+                        tvMineExercise.setText(user.getExerciseVolume());
                     }
-                    if (user.getDietary_target() != null) {
-                        tv_mine_goal.setText(user.getDietary_target());
+                    if (user.getDietaryTarget() != null) {
+                        tvMineGoal.setText(user.getDietaryTarget());
                     }
+                    /* 登录成功则记录全局User */
+                    LcLabToolkit.setUser(user);
                     break;
                 case LOGIN_FAILED_BY_NETWORK:
-                    ll_mine_warning.setVisibility(View.VISIBLE);
-                    tv_mine_account.setText((account + "(登录失败)"));
+                    llMineWarning.setVisibility(View.VISIBLE);
+                    LcLabToolkit.showToastHint(getContext(), "登录失败，网络异常", R.drawable.error);
                     break;
                 case LOGIN_FAILED_BY_SYSTEM:
-                    tv_mine_account.setText((account + "(系统异常)"));
+                    LcLabToolkit.showToastHint(getContext(), "登录失败，系统异常", R.drawable.error);
                     break;
                 case MODIFIED_FAILED_BY_NETWORK:
-                    Toast.makeText(getContext(), "网络异常，修改失败", Toast.LENGTH_SHORT).show();
+                    LcLabToolkit.showToastHint(getContext(), "修改失败，网络异常", R.drawable.error);
                     break;
                 case MODIFIED_FAILED_BY_NOT_LOGIN:
-                    Toast.makeText(getContext(), "未登录，修改失败", Toast.LENGTH_SHORT).show();
+                    LcLabToolkit.showToastHint(getContext(), "修改失败，未登录", R.drawable.error);
                     break;
                 case MODIFIED_FAILED_BY_INVALID:
-                    Toast.makeText(getContext(), "无效的输入，修改失败", Toast.LENGTH_SHORT).show();
+                    LcLabToolkit.showToastHint(getContext(), "修改失败，无效的输入", R.drawable.plaint);
                     break;
+                    default:
             }
             return false;
         }
@@ -109,55 +118,54 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         /* 加载帧视图 */
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
 
-        ll_mine_not_login = view.findViewById(R.id.ll_mine_not_login);
-        sv_mine_login = view.findViewById(R.id.sv_mine_login);
-        tv_mine_account = view.findViewById(R.id.tv_mine_account);
-        tv_mine_height = view.findViewById(R.id.tv_mine_height);
-        tv_mine_weight = view.findViewById(R.id.tv_mine_weight);
-        tv_mine_sex = view.findViewById(R.id.tv_mine_sex);
-        tv_mine_birth = view.findViewById(R.id.tv_mine_birth);
-        tv_mine_whr = view.findViewById(R.id.tv_mine_whr);
-        tv_mine_exercise = view.findViewById(R.id.tv_mine_exercise);
-        tv_mine_goal = view.findViewById(R.id.tv_mine_goal);
+        llMineNotLogin = view.findViewById(R.id.ll_mine_not_login);
+        svMineLogin = view.findViewById(R.id.sv_mine_login);
+        tvMineAccount = view.findViewById(R.id.tv_mine_account);
+        tvMineHeight = view.findViewById(R.id.tv_mine_height);
+        tvMineWeight = view.findViewById(R.id.tv_mine_weight);
+        tvMineSex = view.findViewById(R.id.tv_mine_sex);
+        tvMineBirth = view.findViewById(R.id.tv_mine_birth);
+        tvMineWhr = view.findViewById(R.id.tv_mine_whr);
+        tvMineExercise = view.findViewById(R.id.tv_mine_exercise);
+        tvMineGoal = view.findViewById(R.id.tv_mine_goal);
+        llMineWarning = view.findViewById(R.id.ll_mine_warning);
+        llMineWarning.setOnClickListener(this);
+        LinearLayout llMineLogin = view.findViewById(R.id.ll_mine_login);
+        llMineLogin.setOnClickListener(this);
+        LinearLayout llMineHeight = view.findViewById(R.id.ll_mine_height);
+        llMineHeight.setOnClickListener(this);
+        LinearLayout llMineWeight = view.findViewById(R.id.ll_mine_weight);
+        llMineWeight.setOnClickListener(this);
+        LinearLayout llMineSex = view.findViewById(R.id.ll_mine_sex);
+        llMineSex.setOnClickListener(this);
+        LinearLayout llMineBirth = view.findViewById(R.id.ll_mine_birth);
+        llMineBirth.setOnClickListener(this);
+        LinearLayout llMineWhr = view.findViewById(R.id.ll_mine_whr);
+        llMineWhr.setOnClickListener(this);
+        LinearLayout llMineExercise = view.findViewById(R.id.ll_mine_exercise);
+        llMineExercise.setOnClickListener(this);
+        LinearLayout llMineGoal = view.findViewById(R.id.ll_mine_goal);
+        llMineGoal.setOnClickListener(this);
+        LinearLayout llMineActivity = view.findViewById(R.id.ll_mine_activity);
+        llMineActivity.setOnClickListener(this);
+        LinearLayout llMineOrderForm = view.findViewById(R.id.ll_mine_order_form);
+        llMineOrderForm.setOnClickListener(this);
+        LinearLayout llMineAddress = view.findViewById(R.id.ll_mine_address);
+        llMineAddress.setOnClickListener(this);
+        LinearLayout llMinePassword = view.findViewById(R.id.ll_mine_password);
+        llMinePassword.setOnClickListener(this);
+        LinearLayout llMineChangeAccount = view.findViewById(R.id.ll_mine_change_account);
+        llMineChangeAccount.setOnClickListener(this);
+        LinearLayout llMineLogout = view.findViewById(R.id.ll_mine_logout);
+        llMineLogout.setOnClickListener(this);
+        LinearLayout llMineAbout = view.findViewById(R.id.ll_mine_about);
+        llMineAbout.setOnClickListener(this);
 
-        ll_mine_warning = view.findViewById(R.id.ll_mine_warning);
-        ll_mine_warning.setOnClickListener(this);
-        ll_mine_login = view.findViewById(R.id.ll_mine_login);
-        ll_mine_login.setOnClickListener(this);
-        ll_mine_height = view.findViewById(R.id.ll_mine_height);
-        ll_mine_height.setOnClickListener(this);
-        ll_mine_weight = view.findViewById(R.id.ll_mine_weight);
-        ll_mine_weight.setOnClickListener(this);
-        ll_mine_sex = view.findViewById(R.id.ll_mine_sex);
-        ll_mine_sex.setOnClickListener(this);
-        ll_mine_birth = view.findViewById(R.id.ll_mine_birth);
-        ll_mine_birth.setOnClickListener(this);
-        ll_mine_whr = view.findViewById(R.id.ll_mine_whr);
-        ll_mine_whr.setOnClickListener(this);
-        ll_mine_exercise = view.findViewById(R.id.ll_mine_exercise);
-        ll_mine_exercise.setOnClickListener(this);
-        ll_mine_goal = view.findViewById(R.id.ll_mine_goal);
-        ll_mine_goal.setOnClickListener(this);
-        ll_mine_activity = view.findViewById(R.id.ll_mine_activity);
-        ll_mine_activity.setOnClickListener(this);
-        ll_mine_order_form = view.findViewById(R.id.ll_mine_order_form);
-        ll_mine_order_form.setOnClickListener(this);
-        ll_mine_address = view.findViewById(R.id.ll_mine_address);
-        ll_mine_address.setOnClickListener(this);
-        ll_mine_password = view.findViewById(R.id.ll_mine_password);
-        ll_mine_password.setOnClickListener(this);
-        ll_mine_logout = view.findViewById(R.id.ll_mine_logout);
-        ll_mine_logout.setOnClickListener(this);
-        ll_mine_about = view.findViewById(R.id.ll_mine_about);
-        ll_mine_about.setOnClickListener(this);
-
-        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("lc_lab_user", MODE_PRIVATE);
-        //account =  sharedPreferences.getString("account",null);
-        //password =  sharedPreferences.getString("password",null);
-        account = "17839741231";
-        password = "17839741231";
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("lc_lab_user_information", MODE_PRIVATE);
+        account =  sharedPreferences.getString("account",null);
+        password =  sharedPreferences.getString("password",null);
         if (account == null) {
-            /* 没有登录 */
+            /* 未曾登录 */
             handler.sendMessage(theMessage(NOT_LOGIN));
         }
         else {
@@ -168,7 +176,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     }
 
     public void login() {
-        new Thread(new Runnable() {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 handler.sendMessage(theMessage(LOGGING));
@@ -180,8 +188,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     handler.sendMessage(theMessage(LOGIN_SUCCESSFULLY));
                 }
                 else {
-                    NetworkChecker networkChecker = new NetworkChecker(getContext());
-                    if (networkChecker.isConnecting()) {
+                    if (LcLabToolkit.isConnectingForNetwork(Objects.requireNonNull(getContext()))) {
                         /* 系统故障 */
                         handler.sendMessage(theMessage(LOGIN_FAILED_BY_SYSTEM));
                     }
@@ -191,13 +198,21 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     }
                 }
             }
-        }).start();
+        };
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+                1,1,10, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<Runnable>(1),
+                new ThreadPoolExecutor.DiscardOldestPolicy());
+        threadPool.execute(runnable);
+        threadPool.shutdown();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_mine_login:
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_mine_warning:
                 login();
@@ -231,10 +246,16 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.ll_mine_password:
                 break;
+            case R.id.ll_mine_change_account:
+                Intent intentLogin = new Intent(getContext(), LoginActivity.class);
+                startActivity(intentLogin);
+                break;
             case R.id.ll_mine_logout:
+                showLogoutDialog();
                 break;
             case R.id.ll_mine_about:
                 break;
+                default:
         }
     }
 
@@ -248,24 +269,27 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setHint("在此输入您的身高（厘米）");
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(editText).setTitle(" ").setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (user == null) {
-                            handler.sendMessage(theMessage(MODIFIED_FAILED_BY_NOT_LOGIN));
-                        }
-                        else {
-                            String string = editText.getText().toString();
-                            if (string.equals("")) {
-                                handler.sendMessage(theMessage(MODIFIED_FAILED_BY_INVALID));
-                            }
-                            else {
-                                user.setHeight_cm(Double.parseDouble(string));
-                            }
-                            modifyUser();
-                        }
+        builder.setView(editText).setTitle(" ");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (user == null) {
+                    handler.sendMessage(theMessage(MODIFIED_FAILED_BY_NOT_LOGIN));
+                }
+                else {
+                    String string = editText.getText().toString();
+                    double maximumOfHeight = 300;
+                    if ("".equals(string) || Double.parseDouble(string) > maximumOfHeight) {
+                        handler.sendMessage(theMessage(MODIFIED_FAILED_BY_INVALID));
                     }
-                });
+                    else {
+                        user.setHeight(Double.parseDouble(string));
+                    }
+                    modifyUser();
+                }
+            }
+        });
+        builder.setNegativeButton("取消", null);
         builder.create().show();
     }
     private void showWeightDialog() {
@@ -281,16 +305,18 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 }
                 else {
                     String string = editText.getText().toString();
-                    if (string.equals("")) {
+                    double maximumOfWeight = 200;
+                    if ("".equals(string) || Double.parseDouble(string) > maximumOfWeight) {
                         handler.sendMessage(theMessage(MODIFIED_FAILED_BY_INVALID));
                     }
                     else {
-                        user.setWeight_kg(Double.parseDouble(string));
+                        user.setWeight(Double.parseDouble(string));
                     }
                     modifyUser();
                 }
             }
         });
+        builder.setNegativeButton("取消", null);
         builder.create().show();
     }
     private void showSexDialog(){
@@ -349,17 +375,19 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 }
                 else {
                     String string = editText.getText().toString();
-                    if (string.equals("")) {
+                    double minimumOfWhr = 0.5, maximumOfWhr = 2;
+                    if ("".equals(string) || Double.parseDouble(string) < minimumOfWhr || Double.parseDouble(string) > maximumOfWhr) {
                         handler.sendMessage(theMessage(MODIFIED_FAILED_BY_INVALID));
                     }
                     else {
-                        user.setWaist_to_hip_ratio(Double.parseDouble(string));
+                        user.setWaistToHipRatio(Double.parseDouble(string));
                     }
                     modifyUser();
                 }
 
             }
         });
+        builder.setNegativeButton("取消", null);
         builder.create().show();
     }
     private void showExerciseDialog(){
@@ -372,7 +400,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     handler.sendMessage(theMessage(MODIFIED_FAILED_BY_NOT_LOGIN));
                 }
                 else {
-                    user.setExercise_volume(items[which]);
+                    user.setExerciseVolume(items[which]);
                     modifyUser();
                 }
             }
@@ -389,21 +417,41 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     handler.sendMessage(theMessage(MODIFIED_FAILED_BY_NOT_LOGIN));
                 }
                 else {
-                    user.setDietary_target(items[which]);
+                    user.setDietaryTarget(items[which]);
                     modifyUser();
                 }
             }
         });
         listDialog.show();
     }
+    private void showLogoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("是否注销该账户");
+        builder.setIcon(R.drawable.about);
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("lc_lab_user_information", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("account");
+                editor.remove("password");
+                editor.remove("calorie");
+                editor.remove("goal");
+                editor.apply();
+                handler.sendMessage(theMessage(NOT_LOGIN));
+            }
+        });
+        builder.setNegativeButton("取消", null);
+        builder.show();
+    }
 
     public void modifyUser() {
-        new Thread(new Runnable() {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 DatabaseConnector databaseConnector = new DatabaseConnector(getContext());
                 databaseConnector.connectToDatabase();
-                if (databaseConnector.updateUser(user.getAccount(), user.getPassword(), user.getPassword(), user.getHeight_cm(), user.getWeight_kg(), user.getBirthday(), user.getGender(), user.getWaist_to_hip_ratio(), user.getExercise_volume(), user.getDietary_target())) {
+                if (databaseConnector.updateUser(user.getAccount(), user.getPassword(), user.getPassword(), user.getHeight(), user.getWeight(), user.getBirthday(), user.getGender(), user.getWaistToHipRatio(), user.getExerciseVolume(), user.getDietaryTarget())) {
                     handler.sendMessage(theMessage(LOGIN_SUCCESSFULLY));
                 }
                 else {
@@ -411,6 +459,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 }
                 databaseConnector.closeDatabase();
             }
-        }).start();
+        };
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+                1,1,10, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<Runnable>(1),
+                new ThreadPoolExecutor.DiscardOldestPolicy());
+        threadPool.execute(runnable);
+        threadPool.shutdown();
     }
 }

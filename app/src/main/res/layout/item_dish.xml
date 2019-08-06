@@ -73,7 +73,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/ib_add_dish"
+                    android:id="@+id/ib_dish_add_dish"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"

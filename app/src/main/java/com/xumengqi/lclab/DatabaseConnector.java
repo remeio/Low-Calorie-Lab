@@ -1,11 +1,3 @@
-/**
- * 使用须知：
- * 1.需要在 build.gradle 中添加 implementation 'mysql:mysql-connector-java:5.1.18'
- * 2.需要获取网络全权限 <uses-permission android:name="android.permission.INTERNET"/>，高版本手机需要设置额外网络权限;
- * 3.需要当前数据库登录账户是有相关权限的
- * 4.Logcat 用 Info 搜索 DatabaseConnector_xmq
- * Last Modified：2019.7.23 by徐梦旗 2663479778@qq.com
- */
 package com.xumengqi.lclab;
 
 import android.content.Context;
@@ -27,62 +19,73 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-/** 此类将保证从此类获取到的数据的有效性，一切数据加载异常都由此类处理，即外部类获取的数据是默认有效的，故不做异常处理 */
-public class DatabaseConnector {
+/**
+ * 数据库连接器：
+ * 此类将保证从此类获取到的数据的有效性，一切数据加载异常都由此类处理，即外部类获取的数据是默认有效的，故不做异常处理
+ * 使用须知：
+ * 1.需要在 build.gradle 中添加 implementation 'mysql:mysql-connector-java:5.1.18'
+ * 2.需要获取网络全权限 <uses-permission android:name="android.permission.INTERNET"/>，高版本手机需要设置额外网络权限;
+ * 3.需要当前数据库登录账户是有相关权限的
+ * 4.Logcat 用 Info 搜索 DatabaseConnector_xmq
+ * Last Modified：2019/08/05 by徐梦旗 2663479778@qq.com
+ * @author xumengqi
+ * @date 2019/08/04
+ */
+class DatabaseConnector {
     /** 数据库连接配置信息 */
-    private final String HOSTNAME = "rm-wz9bmh868vzio5p8swo.mysql.rds.aliyuncs.com";
-    private final String PORT = "3306";
-    private final String DATABASE = "lc_lab";
-    private final String USER = "root";
-    private final String PASSWORD = "Root1234";
-    private final String URL = "jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DATABASE;
+    private static final String HOSTNAME = "rm-wz9bmh868vzio5p8swo.mysql.rds.aliyuncs.com";
+    private static final String PORT = "3306";
+    private static final String DATABASE = "lc_lab";
+    private static final String USER = "root";
+    private static final String PASSWORD = "Root1234";
+    private static final String URL = "jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DATABASE;
     private Connection connection = null;
     private Context context;
 
     /** 传入上下文 */
-    public DatabaseConnector(Context context) {
+    DatabaseConnector(Context context) {
         this.context = context;
     }
 
     /** 连接到数据库 */
-    public void connectToDatabase() {
-        notifyState("正在连接数据库（" + DATABASE + "）...");
+    void connectToDatabase() {
+        notifyState("正在连接数据库<" + DATABASE + ">...");
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         if (connection != null) {
-            notifyState("连接数据库（" + DATABASE + "）成功");
+            notifyState("连接数据库<" + DATABASE + ">成功");
         } else {
-            notifyState("连接数据库（" + DATABASE + "）失败");
+            notifyState("连接数据库<" + DATABASE + ">失败");
         }
     }
 
     /** 断开与数据库的连接 */
-    public void closeDatabase() {
+    void closeDatabase() {
         if (connection == null) {
-            notifyState("没有连接上数据库，所以没必要关闭数据库（" + DATABASE + ")");
+            notifyState("没有连接上数据库，所以没必要关闭数据库<" + DATABASE + ")");
         } else {
             try {
                 connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            notifyState("关闭数据库（" + DATABASE + "）成功");
+            notifyState("关闭数据库<" + DATABASE + ">成功");
         }
     }
 
     /** 获取菜品列表 */
-    public List<Dish> getAllDish() {
+    List<Dish> getAllDish() {
         String table = "lc_lab_food_information_table";
-        notifyState("正在表（" + table + "）中查找所有行，并返回List<Dish>...");
+        notifyState("正在表<" + table + ">中查找所有行，并返回List<Dish>...");
         List<Dish> dishList = new ArrayList<>();
         if (connection != null) {
             try {
-                String queryAllInTableSQL = "select * from " + table;
+                String queryAllInTableSql = "select * from " + table;
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(queryAllInTableSQL);
+                ResultSet resultSet = statement.executeQuery(queryAllInTableSql);
                 while (resultSet.next()) {
                     Dish dish = new Dish(
                             resultSet.getInt("id"),
@@ -108,23 +111,23 @@ public class DatabaseConnector {
             }
         }
         if (dishList.size() == 0) {
-            notifyState("表（" + table + "）可能是个空表，或未连接到数据库");
+            notifyState("表<" + table + ">可能是个空表，或未连接到数据库");
         } else {
-            notifyState("遍历（" + table + "），并返回List<Dish>成功");
+            notifyState("遍历<" + table + ">，并返回List<Dish>成功");
         }
         return dishList;
     }
 
     /** 根据菜品ID来找到相应菜品 */
-    public Dish getDishByID(int id) {
+    Dish getDishById(int id) {
         String table = "lc_lab_food_information_table";
         notifyState("正在表" + table + "中查找id为" + id + "的首次行，并返回Dish...");
         Dish dish = null;
         if (connection != null) {
             try {
-                String queryOneInTableSQL = "select * from " + table + " where id = " + id;
+                String queryOneInTableSql = "select * from " + table + " where id = " + id;
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(queryOneInTableSQL);
+                ResultSet resultSet = statement.executeQuery(queryOneInTableSql);
 
                 if (resultSet.first()) {
                     dish = new Dish(
@@ -158,21 +161,20 @@ public class DatabaseConnector {
     }
 
     /** 根据账户名来获取账户信息 */
-    public User getUserByAccount(String account, String password) {
+    User getUserByAccount(String account, String password) {
         String table = "lc_lab_user_information_table";
-        notifyState("正在表（" + table + "）中查找account为（" + account + "）的首次行，并返回User...");
+        notifyState("正在表<" + table + ">中查找account为<" + account + ">的首次行，并返回User...");
         User user = null;
         if (connection != null) {
             try {
-                String queryOneInTableSQL = "select * from " + table + " where account = " + account + " and password = '" + password + "'";
+                String queryOneInTableSql = "select * from " + table + " where account = " + account + " and password = '" + password + "'";
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(queryOneInTableSQL);
+                ResultSet resultSet = statement.executeQuery(queryOneInTableSql);
                 if (resultSet.first()) {
                     user = new User(
                             resultSet.getInt("id"),
                             resultSet.getString("account"),
                             resultSet.getString("password"),
-                            //getPictureByPathString(resultSet.getString("picture")),
                             null,
                             resultSet.getDouble("height_cm"),
                             resultSet.getDouble("weight_kg"),
@@ -191,81 +193,86 @@ public class DatabaseConnector {
             }
         }
         if (user == null) {
-            notifyState("在表（" + table + "）中没有找到account为（" + account + "）的行，或未连接到数据库，或密码不正确");
+            notifyState("在表<" + table + ">中没有找到account为<" + account + ">的行，或未连接到数据库，或密码不正确");
         } else {
-            notifyState("在表（" + table + "）中找到了account为（" + account + "）的行，返回User成功");
+            notifyState("在表<" + table + ">中找到了account为<" + account + ">的行，返回User成功");
         }
         return user;
     }
 
     /** 更新账户信息 */
-    public Boolean updateUser(
+    Boolean updateUser(
             String account,
             String password,
             String passwordNew,
-            double height_cm,
-            double weight_kg,
+            double heightCm,
+            double weightKg,
             Date birthday,
             String gender,
-            double waist_to_hip_ratio,
-            String exercise_volume,
-            String dietary_target) {
+            double waistToHipRatio,
+            String exerciseVolume,
+            String dietaryTarget) {
         String table = "lc_lab_user_information_table";
-        notifyState("正在表（" + table + "）中查找account为（" + account + "）的首次行，并更新除id，account和notes外的其他信息...");
+        notifyState("正在表<" + table + ">中查找account为<" + account + ">的首次行，并更新除id，account和notes外的其他信息...");
         try {
             if (connection != null) {
                 PreparedStatement preparedStatement = connection.prepareStatement("update " + table + " set password=?, height_cm=?, weight_kg=?, birthday=?, gender=?, waist_to_hip_ratio=?, exercise_volume=?, dietary_target=? where account = ? and password = ?");
                 preparedStatement.setString(1, passwordNew);
-                preparedStatement.setDouble(2, height_cm);
-                preparedStatement.setDouble(3, weight_kg);
-                preparedStatement.setDate(4, new java.sql.Date(birthday.getTime()));
+                preparedStatement.setDouble(2, heightCm);
+                preparedStatement.setDouble(3, weightKg);
+                preparedStatement.setDate(4, birthday == null ? null : new java.sql.Date(birthday.getTime()));
                 preparedStatement.setString(5, gender);
-                preparedStatement.setDouble(6, waist_to_hip_ratio);
-                preparedStatement.setString(7, exercise_volume);
-                preparedStatement.setString(8, dietary_target);
+                preparedStatement.setDouble(6, waistToHipRatio);
+                preparedStatement.setString(7, exerciseVolume);
+                preparedStatement.setString(8, dietaryTarget);
                 preparedStatement.setString(9, account);
                 preparedStatement.setString(10, password);
                 if (preparedStatement.executeUpdate() == 1) {
                     preparedStatement.close();
-                    notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行成功");
+                    notifyState("在表<" + table + ">中更新account为<" + account + ">的首次行成功");
                     return true;
                 } else {
                     preparedStatement.close();
-                    notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行失败，没有找到");
+                    notifyState("在表<" + table + ">中更新account为<" + account + ">的首次行失败，没有找到该账户");
                     return false;
                 }
             }
             else {
-                notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行失败，没有连接到数据库");
+                notifyState("在表<" + table + ">中更新account为<" + account + ">的首次行失败，没有连接到数据库");
                 return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        notifyState("在表（" + table + "）中更新account为（" + account + "）的首次行失败，其他原因");
+        notifyState("在表<" + table + ">中更新account为<" + account + ">的首次行失败，其他原因");
         return false;
     }
 
     /** 注册一个新账户 */
-    public Boolean registerNewAccount(String account, String password) {
+    Boolean registerNewAccount(String account, String password) {
+        /* 连接数据库失败，则直接返回false */
+        if (connection == null) {
+            notifyState("注册账户<" + account + ">失败，未连接到数据库");
+            return false;
+        }
         int idMax = 0;
         String table = "lc_lab_user_information_table";
-        String findMaxIDSql = "SELECT MAX(id) FROM " + table;
+        String findMaxIdSql = "SELECT MAX(id) FROM " + table;
         String isExistTheAccountSqlRegister = "select * from " + table + " where account = " + account;
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(findMaxIDSql);
+            ResultSet resultSet = statement.executeQuery(findMaxIdSql);
             if (resultSet.first()) {
                 idMax = resultSet.getInt(1);
             }
             resultSet = statement.executeQuery(isExistTheAccountSqlRegister);
             if (resultSet.first()) {
-                notifyState("注册账户（" + account + "）失败，可能是因为该账户已存在");
+                notifyState("注册账户<" + account + ">失败，可能是因为该账户已存在");
                 return false;
             } else {
                 String registerSql = "INSERT INTO " + table + " (`id`, `account`, `password`) VALUES (" + (idMax + 1) + ", '" + account + "', '" + password + "')";
                 statement.execute(registerSql);
-                notifyState("注册账户（" + account + "）成功");
+                notifyState("注册账户<" + account + ">成功");
                 return true;
             }
         } catch (SQLException e) {
@@ -275,17 +282,22 @@ public class DatabaseConnector {
     }
 
     /** 登录一个账户 */
-    public Boolean loginAccount(String account, String password) {
+    Boolean loginAccount(String account, String password) {
+        /* 连接数据库失败，则直接返回false */
+        if (connection == null) {
+            notifyState("登录账户<" + account + ">失败，未连接到数据库");
+            return false;
+        }
         String table = "lc_lab_user_information_table";
         String isExistTheAccountSqlLogin = "select * from " + table + " where account = " + account + " and password = '" + password + "'";
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(isExistTheAccountSqlLogin);
             if (resultSet.first()) {
-                notifyState("登录（" + account + "）成功");
+                notifyState("登录<" + account + ">成功");
                 return true;
             } else {
-                notifyState("登录（" + account + "）失败，密码错误或未注册");
+                notifyState("登录<" + account + ">失败，密码错误或未注册");
                 return false;
             }
         } catch (SQLException e) {
@@ -296,21 +308,21 @@ public class DatabaseConnector {
 
     /** 获取图片，首先在本地寻找，若没有找到，则从云端寻找 */
     private Bitmap getPictureByIdOrUrl(Context context, int id, String fileName) {
-        final String URL = "http://106.15.39.96/media/food_information_table_images/";
+        final String url = "http://106.15.39.96/media/food_information_table_images/";
         String drawableName = "food_picture" + id;
         int resId = context.getResources().getIdentifier(drawableName , "drawable", Objects.requireNonNull(context).getPackageName());
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
-        return bitmap == null ? getHttpBitmap(context, URL + fileName + ".jpg") : bitmap;
+        return bitmap == null ? getHttpBitmap(context, url + fileName + ".jpg") : bitmap;
     }
 
     /** 从网址获取图片，并配置没有找到时显示的图片 */
     private Bitmap getHttpBitmap(Context context, String url) {
-        URL myFileURL;
+        URL myFileUrl;
         Bitmap bitmap = null;
         try {
-            myFileURL = new URL(url);
+            myFileUrl = new URL(url);
             /* 获得连接 */
-            HttpURLConnection conn = (HttpURLConnection) myFileURL.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
             /* 设置超时时间为3000毫秒，conn.setConnectionTime(0);表示没有时间限制 */
             conn.setConnectTimeout(3000);
             conn.setRequestMethod("GET");

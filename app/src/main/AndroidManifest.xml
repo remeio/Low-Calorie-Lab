@@ -13,15 +13,25 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DishDetailActivity">
-        </activity>
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".DishDetailActivity">
+        </activity>
+        <activity android:name=".LoginActivity">
+        </activity>
+        <activity android:name=".BaseActivity">
+        </activity>
+        <activity android:name=".FoodDetailActivity">
         </activity>
     </application>
 

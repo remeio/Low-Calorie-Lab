@@ -2,14 +2,19 @@ package com.xumengqi.lclab;
 
 import android.graphics.Bitmap;
 
-public class Goods {
+/**
+ *
+ * @author xumengqi
+ * @date 2019/08/04
+ */
+class Goods {
     private int id;
     private String name;
     private Bitmap picture;
     private double price;
     private int count = 1;
 
-    public Goods(int id, String name, Bitmap picture, double price, int count) {
+    Goods(int id, String name, Bitmap picture, double price, int count) {
         this.id = id;
         this.name = name;
         this.picture = picture;
@@ -17,36 +22,32 @@ public class Goods {
         this.count = count;
     }
 
-    public void addCount() {
+    void addCount() {
         count++;
     }
 
-    public void minusCount() {
+    void minusCount() {
         if (count > 0) {
             count--;
         }
     }
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public Bitmap getPicture() {
+    Bitmap getPicture() {
         return picture;
     }
 
-    public double getPrice() {
+    double getPrice() {
         return price;
     }
 
-    public int getCount() {
+    int getCount() {
         return count;
     }
 
-    public int getId() {
+    int getId() {
         return id;
-    }
-
-    public void setPicture(Bitmap picture) {
-        this.picture = picture;
     }
 }

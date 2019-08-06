@@ -5,13 +5,10 @@
         android:id="@+id/navigation_item_one"
         android:icon="@drawable/navigation_item_one"
         android:title="@string/navigation_item_one" />
-
-
     <item
         android:id="@+id/navigation_item_two"
         android:icon="@drawable/navigation_item_two"
         android:title="@string/navigation_item_two" />
-
     <item
         android:id="@+id/navigation_item_three"
         android:icon="@drawable/navigation_item_three"
