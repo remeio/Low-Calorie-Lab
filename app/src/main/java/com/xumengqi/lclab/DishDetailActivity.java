@@ -42,15 +42,30 @@ public class DishDetailActivity extends BaseActivity {
                     /* 设置组件的内容 */
                     tvDishDetailName.setText(dish.getName());
                     ivDishDetailPicture.setImageBitmap(dish.getPicture());
-                    tvDishDetailCalorie.setText(("卡路里：" + dish.getCalorie() + "千卡"));
-                    tvDishDetailCarbohydrate.setText(("碳水化合物：" + dish.getCarbohydrate() + "克"));
-                    tvDishDetailFat.setText(("脂肪：" + dish.getFat() + "克"));
-                    tvDishDetailProtein.setText(("蛋白质：" + dish.getProtein() + "克"));
-                    tvDishDetailDietaryFiber.setText(("膳食纤维：" + dish.getDietaryFiber() + "克"));
-                    tvDishDetailIngredient.setText(("主要成分：" + dish.getIngredient()));
-                    tvDishDetailCategory.setText(("类别：" + dish.getCategory()));
-                    tvDishDetailPrice.setText(("价格：" + dish.getPrice() + "元"));
-                    tvDishDetailNotes.setText((dish.getNotes()));
+                    tvDishDetailCalorie.setText((dish.getCalorie() + "千卡"));
+                    tvDishDetailCarbohydrate.setText((dish.getCarbohydrate() + "克"));
+                    tvDishDetailFat.setText((dish.getFat() + "克"));
+                    tvDishDetailProtein.setText((dish.getProtein() + "克"));
+                    tvDishDetailDietaryFiber.setText((dish.getDietaryFiber() + "克"));
+                    tvDishDetailIngredient.setText((dish.getIngredient()));
+                    tvDishDetailCategory.setText((dish.getCategory()));
+                    tvDishDetailPrice.setText((dish.getPrice() + "元"));
+
+                    String[] noteArray = new String[5];
+                    noteArray[0] = "该菜品主要由" + dish.getIngredient() + "组成，";
+                    int proportion = (int)(10 / (1 + dish.getFat() / dish.getCarbohydrate()));
+                    noteArray[1] = "其碳水化合物与脂肪的比例为" + proportion + ":" + (10 - proportion) + "，";
+                    boolean isFatReductionMeal = ("减脂餐".equals(dish.getCategory()) || "沙拉".equals(dish.getCategory()));
+                    String fatTemp = isFatReductionMeal ? "低" : "高";
+                    boolean isVegetables = "蔬菜".equals(dish.getIngredient());
+                    noteArray[2] = "其高蛋白，" +  fatTemp +"脂肪的特点，";
+                    noteArray[3] = isVegetables ? "又富含膳食纤维，" : "";
+                    noteArray[4] = "在维持日常消耗的同时，" + (isFatReductionMeal ? "不带来额外的热量，" : "带来更多的热量，") + "适合" + (isFatReductionMeal ? "减脂" : "增肌") + "人群食用。";
+                    StringBuilder notes = new StringBuilder();
+                    for (String note : noteArray) {
+                        notes.append(note);
+                    }
+                    tvDishDetailNotes.setText(notes.toString());
                     break;
                 case LOAD_DISH_DETAIL_UNSUCCESSFULLY:
                     /* 给用户反馈，通知加载失败 */

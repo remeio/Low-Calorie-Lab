@@ -17,6 +17,7 @@ import android.widget.Toast;
  */
 class LcLabToolkit {
     private static User user;
+    private static boolean readyToUpdate = false;
 
     static void showToastHint(Context context, String string, int idOfDrawable) {
         Toast toast = new Toast(context);
@@ -40,5 +41,11 @@ class LcLabToolkit {
     }
     static User getUser() {
         return user;
+    }
+    static void setReadyToUpdate(Boolean readyToUpdateNew) {
+        readyToUpdate = readyToUpdateNew;
+    }
+    static boolean isReadyToUpdate() {
+        return readyToUpdate;
     }
 }

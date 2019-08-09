@@ -92,6 +92,7 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/tv_store_class_zero"
                             android:layout_width="match_parent"
@@ -100,8 +101,8 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:gravity="center"
-                            android:text="推荐"
-                            android:textColor="@color/colorPrimaryExtra"/>
+                            android:text="为您推荐"
+                            android:textColor="@color/colorPrimaryExtra" />
 
                         <View
                             android:layout_width="match_parent"

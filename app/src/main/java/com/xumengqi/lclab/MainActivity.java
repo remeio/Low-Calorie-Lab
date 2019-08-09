@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,12 @@ import java.util.List;
  * @date 2019/08/04
  */
 public class MainActivity extends BaseActivity {
-
     private List<Fragment> fragmentList;
     private int lastShowFragment;
 
     /** 其代表了下标，不能轻易更改 */
     private final int ONE_FRAGMENT = 0, TWO_FRAGMENT = 1, THREE_FRAGMENT = 2, FOUR_FRAGMENT = 3;
-
+    private Long exitTime = (long)0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,5 +96,17 @@ public class MainActivity extends BaseActivity {
         fragmentTransaction.show(fragmentList.get(willShowFragment)).commitAllowingStateLoss();
         /* 更新状态 */
         lastShowFragment = willShowFragment;
+    }
+
+    @Override
+    public void onBackPressed() {
+        int duration = 2000;
+        if (System.currentTimeMillis() - exitTime < duration) {
+            ActivityCollector.finishAll();
+        }
+        else {
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        }
     }
 }

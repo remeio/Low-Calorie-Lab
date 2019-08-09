@@ -5,6 +5,7 @@
     android:id="@+id/cv_one_record"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:layout_marginBottom="8dp"
     app:cardCornerRadius="5dp">
 
     <LinearLayout
@@ -19,14 +20,27 @@
             android:background="@color/white"
             android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                app:srcCompat="@drawable/calendar" />
+
             <TextView
                 android:id="@+id/tv_one_record_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                app:srcCompat="@drawable/calorie" />
 
             <TextView
                 android:id="@+id/tv_one_record_calorie"
@@ -34,7 +48,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:textSize="14sp" />
 
         </LinearLayout>

@@ -13,46 +13,39 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ll_content_search"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:elevation="5dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/ib_content_notice"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_margin="5dp"
+                android:id="@+id/ib_content_message"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
+                android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:src="@drawable/message" />
 
-            <SearchView
-                android:id="@+id/sv_content_search"
+            <TextView
                 android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_margin="5dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
-                android:background="@drawable/search_shape"
-                android:iconifiedByDefault="false"
-                android:queryBackground="@null"
-                android:queryHint="搜索食物热量和营养"
-                android:searchIcon="@drawable/search"
-                android:showDividers="none"
-                android:submitBackground="@null" />
+                android:gravity="center"
+                android:text="主页"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
             <ImageButton
                 android:id="@+id/ib_content_camera"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_margin="5dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
+                android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:src="@drawable/camera" />
         </LinearLayout>
 

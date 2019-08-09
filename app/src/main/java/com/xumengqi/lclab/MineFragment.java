@@ -41,7 +41,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private ScrollView svMineLogin;
     private TextView tvMineAccount, tvMineHeight, tvMineWeight, tvMineSex, tvMineBirth, tvMineWhr, tvMineExercise, tvMineGoal;
 
-    private final int NOT_LOGIN = 100, LOGGING = 101, LOGIN_SUCCESSFULLY = 102, LOGIN_FAILED_BY_SYSTEM = 103, LOGIN_FAILED_BY_NETWORK = 104, MODIFIED_FAILED_BY_NETWORK = 105, MODIFIED_FAILED_BY_NOT_LOGIN = 106, MODIFIED_FAILED_BY_INVALID = 107;
+    private final int NOT_LOGIN = 100, LOGGING = 101, LOGIN_SUCCESSFULLY = 102, LOGIN_FAILED_BY_SYSTEM = 103, LOGIN_FAILED_BY_NETWORK = 104, MODIFIED_FAILED_BY_NETWORK = 105, MODIFIED_FAILED_BY_NOT_LOGIN = 106, MODIFIED_FAILED_BY_INVALID = 107, MODIFIED_SUCCESSFULLY = 108;
     private User user;
     private String account, password;
     /** 使用官方的写法，防止内存泄漏 */
@@ -63,31 +63,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     tvMineAccount.setText(account);
                     break;
                 case LOGIN_SUCCESSFULLY:
-                    tvMineAccount.setText(account);
-                    if (user.getHeight() != 0) {
-                        tvMineHeight.setText((user.getHeight() + "cm"));
-                    }
-                    if (user.getWeight() != 0) {
-                        tvMineWeight.setText((user.getWeight() + "kg"));
-                    }
-                    if (user.getGender() != null) {
-                        tvMineSex.setText(user.getGender());
-                    }
-                    if (user.getBirthday() != null) {
-                        DateFormat dateFormat = SimpleDateFormat.getDateInstance();
-                        String dateString = dateFormat.format(user.getBirthday());
-                        tvMineBirth.setText(dateString);
-                    }
-                    if (user.getWaistToHipRatio() != 0) {
-                        tvMineWhr.setText((user.getWaistToHipRatio() + ""));
-                    }
-                    if (user.getExerciseVolume() != null) {
-                        tvMineExercise.setText(user.getExerciseVolume());
-                    }
-                    if (user.getDietaryTarget() != null) {
-                        tvMineGoal.setText(user.getDietaryTarget());
-                    }
-                    /* 登录成功则记录全局User */
+                    updateUserView();
                     LcLabToolkit.setUser(user);
                     break;
                 case LOGIN_FAILED_BY_NETWORK:
@@ -96,6 +72,11 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     break;
                 case LOGIN_FAILED_BY_SYSTEM:
                     LcLabToolkit.showToastHint(getContext(), "登录失败，系统异常", R.drawable.error);
+                    break;
+                case MODIFIED_SUCCESSFULLY:
+                    updateUserView();
+                    LcLabToolkit.setUser(user);
+                    LcLabToolkit.setReadyToUpdate(true);
                     break;
                 case MODIFIED_FAILED_BY_NETWORK:
                     LcLabToolkit.showToastHint(getContext(), "修改失败，网络异常", R.drawable.error);
@@ -146,8 +127,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         llMineExercise.setOnClickListener(this);
         LinearLayout llMineGoal = view.findViewById(R.id.ll_mine_goal);
         llMineGoal.setOnClickListener(this);
-        LinearLayout llMineActivity = view.findViewById(R.id.ll_mine_activity);
-        llMineActivity.setOnClickListener(this);
         LinearLayout llMineOrderForm = view.findViewById(R.id.ll_mine_order_form);
         llMineOrderForm.setOnClickListener(this);
         LinearLayout llMineAddress = view.findViewById(R.id.ll_mine_address);
@@ -237,8 +216,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.ll_mine_goal:
                 showGoalDialog();
-                break;
-            case R.id.ll_mine_activity:
                 break;
             case R.id.ll_mine_order_form:
                 break;
@@ -391,7 +368,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         builder.create().show();
     }
     private void showExerciseDialog(){
-        final String[] items = {"从不运动", "每周1~3次", "每周3~5次"};
+        final String[] items = {"从不运动", "每周1~3次", "每周3~5次", "每周6~7次"};
         AlertDialog.Builder listDialog = new AlertDialog.Builder(getContext());
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -427,7 +404,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private void showLogoutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("是否注销该账户");
-        builder.setIcon(R.drawable.about);
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -438,6 +414,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 editor.remove("calorie");
                 editor.remove("goal");
                 editor.apply();
+                LcLabToolkit.setUser(null);
                 handler.sendMessage(theMessage(NOT_LOGIN));
             }
         });
@@ -452,7 +429,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 DatabaseConnector databaseConnector = new DatabaseConnector(getContext());
                 databaseConnector.connectToDatabase();
                 if (databaseConnector.updateUser(user.getAccount(), user.getPassword(), user.getPassword(), user.getHeight(), user.getWeight(), user.getBirthday(), user.getGender(), user.getWaistToHipRatio(), user.getExerciseVolume(), user.getDietaryTarget())) {
-                    handler.sendMessage(theMessage(LOGIN_SUCCESSFULLY));
+                    handler.sendMessage(theMessage(MODIFIED_SUCCESSFULLY));
                 }
                 else {
                     handler.sendMessage(theMessage(MODIFIED_FAILED_BY_NETWORK));
@@ -466,5 +443,32 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 new ThreadPoolExecutor.DiscardOldestPolicy());
         threadPool.execute(runnable);
         threadPool.shutdown();
+    }
+
+    public void updateUserView() {
+        tvMineAccount.setText(account);
+        if (user.getHeight() != 0) {
+            tvMineHeight.setText((user.getHeight() + "cm"));
+        }
+        if (user.getWeight() != 0) {
+            tvMineWeight.setText((user.getWeight() + "kg"));
+        }
+        if (user.getGender() != null) {
+            tvMineSex.setText(user.getGender());
+        }
+        if (user.getBirthday() != null) {
+            DateFormat dateFormat = SimpleDateFormat.getDateInstance();
+            String dateString = dateFormat.format(user.getBirthday());
+            tvMineBirth.setText(dateString);
+        }
+        if (user.getWaistToHipRatio() != 0) {
+            tvMineWhr.setText((user.getWaistToHipRatio() + ""));
+        }
+        if (user.getExerciseVolume() != null) {
+            tvMineExercise.setText(user.getExerciseVolume());
+        }
+        if (user.getDietaryTarget() != null) {
+            tvMineGoal.setText(user.getDietaryTarget());
+        }
     }
 }

@@ -15,34 +15,39 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/ib_food_detail_back"
+            android:id="@+id/ib_banner_one_back"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:padding="5dp"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/back" />
 
         <TextView
-            android:id="@+id/tv_food_detail_name"
+            android:id="@+id/tv_banner_one_loading"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="正在加载"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <ImageButton
+            android:id="@+id/ib_banner_one_refresh"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:visibility="invisible" />
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/refresh_white" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_food_detail"
+    <WebView
+        android:id="@+id/wv_banner_one_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </LinearLayout>

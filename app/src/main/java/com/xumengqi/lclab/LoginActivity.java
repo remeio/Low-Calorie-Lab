@@ -52,6 +52,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     break;
                 case REGISTER_SUCCESSFULLY:
                     progressDialogRegister.dismiss();
+                    Toast.makeText(LoginActivity.this, "注册并登录成功", Toast.LENGTH_SHORT).show();
                     ActivityCollector.finishAll();
                     Intent intentRegister = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intentRegister);
@@ -108,7 +109,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 }
                 break;
             case R.id.ib_login_back:
-                LoginActivity.this.finish();
+                ActivityCollector.finishActivity(LoginActivity.this);
                 break;
                 default:
         }

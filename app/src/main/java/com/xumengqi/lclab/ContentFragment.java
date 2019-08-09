@@ -1,6 +1,7 @@
 package com.xumengqi.lclab;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -68,7 +69,7 @@ public class ContentFragment extends Fragment {
         bannerImageTitle.add("");
     }
 
-    private void initializeBannerView(View view) {
+    private void initializeBannerView(final View view) {
         BannerImageLoader bannerImageLoader = new BannerImageLoader();
         Banner banner = view.findViewById(R.id.banner_content);
         /* 设置样式，里面有很多种样式可以自己都看看效果 */
@@ -93,6 +94,8 @@ public class ContentFragment extends Fragment {
             public void OnBannerClick(int position) {
                 switch (position) {
                     case 0:
+                        Intent intentOne = new Intent(view.getContext(), BannerOneActivity.class);
+                        startActivity(intentOne);
                         break;
                     case 1:
                         break;

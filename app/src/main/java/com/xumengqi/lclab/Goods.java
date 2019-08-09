@@ -12,7 +12,7 @@ class Goods {
     private String name;
     private Bitmap picture;
     private double price;
-    private int count = 1;
+    private int count;
 
     Goods(int id, String name, Bitmap picture, double price, int count) {
         this.id = id;

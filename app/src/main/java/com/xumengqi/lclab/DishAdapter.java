@@ -34,7 +34,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
     /** 获取组件 */
     static class ViewHolder extends RecyclerView.ViewHolder {
         private CardView cvDish;
-        private ImageView ivDish;
+        private ImageView ivDish, ivDishRecommend;
         private TextView tvDishName, tvDishPrice, tvDishCategory, tvDishCalorie;
         private ImageButton ibDishAddDish;
         ViewHolder(View view) {
@@ -46,6 +46,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
             tvDishCategory = view.findViewById(R.id.tv_dish_category);
             tvDishCalorie = view.findViewById(R.id.tv_dish_calorie);
             ibDishAddDish = view.findViewById(R.id.ib_dish_add_dish);
+            ivDishRecommend = view.findViewById(R.id.iv_dish_recommend);
         }
     }
 
@@ -65,6 +66,10 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
         final Dish dish = dishList.get(i);
         /* 2.设置组件的内容 */
         viewHolder.tvDishName.setText(dish.getName());
+        int recommendedNumber = 3;
+        if (i < recommendedNumber) {
+            viewHolder.ivDishRecommend.setVisibility(View.VISIBLE);
+        }
         viewHolder.tvDishPrice.setText(("¥" + dish.getPrice()));
         viewHolder.tvDishCategory.setText(dish.getCategory());
         viewHolder.tvDishCalorie.setText((dish.getCalorie() + "千卡"));

@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".BannerOneActivity"
+            android:hardwareAccelerated="true"/>
+        <activity
             android:name=".WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar.FullScreen">
             <intent-filter>
@@ -23,16 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-        </activity>
-        <activity android:name=".DishDetailActivity">
-        </activity>
-        <activity android:name=".LoginActivity">
-        </activity>
-        <activity android:name=".BaseActivity">
-        </activity>
-        <activity android:name=".FoodDetailActivity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".DishDetailActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".FoodDetailActivity"></activity>
     </application>
 
 </manifest>

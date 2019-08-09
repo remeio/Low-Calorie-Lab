@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +105,6 @@ public class RecordFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setMessage("是否清空所有记录");
-                builder.setIcon(R.drawable.about);
                 builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -274,19 +274,23 @@ public class RecordFragment extends Fragment {
             TextView tvRecordWeek = view.findViewById(R.id.tv_record_week);
             TextView tvRecordMonth = view.findViewById(R.id.tv_record_month);
             TextView tvRecordAll = view.findViewById(R.id.tv_record_all);
-            tvRecordRecommend.setText((calorieRecommend + "千卡"));
+            int checkNumber = -1;
+            String checkString = "未登录";
+            tvRecordRecommend.setText(calorieRecommend == checkNumber ? checkString : (calorieRecommend + "千卡"));
             tvRecordFact.setText((recordList.get(0).getCalorie() + "千卡"));
-            tvRecordToday.setText((calorieRecommend - recordList.get(0).getCalorie() + "千卡"));
-            tvRecordWeek.setText((calorieWeek + "千卡"));
-            tvRecordMonth.setText((calorieMonth + "千卡" ));
-            tvRecordAll.setText((calorieAll + "千卡"));
+            tvRecordToday.setText(calorieRecommend == checkNumber ? checkString : (calorieRecommend - recordList.get(0).getCalorie() + "千卡"));
+            tvRecordWeek.setText(calorieRecommend == checkNumber ? checkString : (calorieWeek + "千卡"));
+            tvRecordMonth.setText(calorieRecommend == checkNumber? checkString : (calorieMonth + "千卡" ));
+            tvRecordAll.setText(calorieRecommend == checkNumber ? checkString : (calorieAll + "千卡"));
         }
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        initializeRecordManager(getView());
+        if (!hidden) {
+            initializeRecordManager(getView());
+        }
     }
 
     /**
@@ -295,22 +299,25 @@ public class RecordFragment extends Fragment {
      * @return 该用户一天生命活动所消耗的卡路里
      */
     public int computeCalorieForUser(User user) {
+        /* Men 10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) + 5 */
+        /* Women10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) – 161 */
         if (user == null) {
             return -1;
         }
-        double coefficientOfHeight = 10;
-        double coefficientOfWeight = 6.2;
+        double coefficientOfWeight = 10;
+        double coefficientOfHeight = 6.25;
         double coefficientOfAge = -5;
         double coefficientOfMan = 5;
         double coefficientOfWoman = -161;
-        double coefficientOfSportLess = 1.2;
-        double coefficientOfSportMiddle = 1.375;
-        double coefficientOfSportMore = 1.55;
+        double coefficientOfSportNo = 1.2;
+        double coefficientOfSportLight = 1.375;
+        double coefficientOfSportModerate = 1.55;
+        double coefficientOfSportHard = 1.725;
         double ans = 0;
         if (user.getHeight() != 0 && user.getWeight() != 0) {
             ans += coefficientOfHeight * user.getHeight() + coefficientOfWeight * user.getWeight();
             if (user.getBirthday() != null) {
-                int age = (int) (System.currentTimeMillis() - user.getBirthday().getTime()) / 1000 / (365 * 24 * 60 * 60);
+                int age = (int) ((System.currentTimeMillis() - user.getBirthday().getTime()) / 1000 / (365 * 24 * 60 * 60));
                 ans += coefficientOfAge * age;
             }
             if (user.getGender() != null) {
@@ -325,15 +332,18 @@ public class RecordFragment extends Fragment {
             }
             if (user.getExerciseVolume() != null) {
                 String exerciseVolume = user.getExerciseVolume();
-                String[] strings = {"从不运动", "每周1~3次", "每周3~5次"};
+                String[] strings = {"从不运动", "每周1~3次", "每周3~5次", "每周6~7次"};
                 if (strings[0].equals(exerciseVolume)) {
-                    ans *= coefficientOfSportLess;
+                    ans *= coefficientOfSportNo;
                 }
                 else if (strings[1].equals(exerciseVolume)) {
-                    ans *= coefficientOfSportMiddle;
+                    ans *= coefficientOfSportLight;
                 }
                 else if (strings[2].equals(exerciseVolume)) {
-                    ans *= coefficientOfSportMore;
+                    ans *= coefficientOfSportModerate;
+                }
+                else if (strings[3].equals(exerciseVolume)) {
+                    ans *= coefficientOfSportHard;
                 }
             }
         }

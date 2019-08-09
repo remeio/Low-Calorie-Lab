@@ -1,5 +1,6 @@
 package com.xumengqi.lclab;
 
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,8 @@ import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * @author xumengqi
@@ -227,7 +230,10 @@ public class StoreFragment extends Fragment {
                 databaseConnector.connectToDatabase();
                 dishList = databaseConnector.getAllDish();
                 /* 利用推荐算法更新dishList */
-                User user = LcLabToolkit.getUser();
+                SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences("lc_lab_user_information", MODE_PRIVATE);
+                String account =  sharedPreferences.getString("account",null);
+                String password =  sharedPreferences.getString("password",null);
+                User user = databaseConnector.getUserByAccount(account, password);
                 List<Dish> dishListRecommend = getRecommendedDish(user, dishList);
                 if (dishListRecommend != null) {
                     for (Dish dish: dishListRecommend) {
@@ -262,10 +268,7 @@ public class StoreFragment extends Fragment {
     
     /** 随机推荐算法 */
     private List<Dish> getRecommendedDish(User user, List<Dish> dishList) {
-        if (user == null) {
-            return  null;
-        }
-        String goal = user.getDietaryTarget();
+        String goal = (user == null ? null : user.getDietaryTarget());
         String fatLoss = "减脂", muscleGain = "增肌";
         String fatReductionMeal = "减脂餐", salad = "沙拉", muscleMeal = "增肌餐", pasta = "意面轻料理";
         /* 最终结果 */
@@ -319,5 +322,14 @@ public class StoreFragment extends Fragment {
         Message message = new Message();
         message.what = what;
         return message;
+    }
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && LcLabToolkit.isReadyToUpdate()) {
+            initializeDishList();
+            LcLabToolkit.setReadyToUpdate(false);
+            LcLabToolkit.showToastHint(getContext(), "正在为您重新推荐", R.drawable.hourglass);
+        }
     }
 }

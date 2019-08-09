@@ -4,6 +4,7 @@
     android:id="@+id/cv_dish"
     android:layout_width="match_parent"
     android:layout_height="130dp"
+    app:cardCornerRadius="0dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
@@ -29,14 +30,22 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_dish_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center|start"
-                android:text="菜品名"
-                android:textColor="@color/colorBold"
-                android:textSize="18sp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_dish_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:text="菜品名"
+                    android:textColor="@color/colorBold"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_dish_price"
@@ -91,5 +100,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_dish_recommend"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="start|top"
+        android:visibility="gone"
+        app:srcCompat="@drawable/recommend" />
 
 </android.support.v7.widget.CardView>

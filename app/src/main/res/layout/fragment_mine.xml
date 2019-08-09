@@ -69,7 +69,7 @@
             android:id="@+id/sv_mine_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -129,6 +129,14 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
 
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/height" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -171,6 +179,14 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/weight" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -215,6 +231,14 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
 
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/sex" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -257,6 +281,14 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/birth" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -301,6 +333,14 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
 
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/whr" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -343,6 +383,14 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/sport" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -387,6 +435,14 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
 
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/goal" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -421,7 +477,7 @@
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="120dp"
                     android:layout_marginBottom="20dp"
                     android:elevation="5dp"
                     app:cardCornerRadius="5dp">
@@ -432,39 +488,6 @@
                         android:orientation="vertical">
 
                         <LinearLayout
-                            android:id="@+id/ll_mine_activity"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:layout_weight="1"
-                                android:text="我的动态"
-                                android:textColor="@color/colorBold"
-                                android:textSize="14sp" />
-
-                            <ImageView
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="10dp"
-                                android:src="@drawable/right_arrow" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorLine" />
-
-                        <LinearLayout
                             android:id="@+id/ll_mine_order_form"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
@@ -473,6 +496,14 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/order" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -506,6 +537,14 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/address" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -566,6 +605,14 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
 
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/password" />
+
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -599,6 +646,13 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
 
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/change_account" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -633,6 +687,13 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
 
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/logout" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -682,6 +743,14 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/about" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -764,6 +833,14 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:scaleType="fitCenter"
+                            app:srcCompat="@drawable/login" />
 
                         <TextView
                             android:layout_width="0dp"
