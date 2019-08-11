@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--高版本手机需要此行来获取网络权限-->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

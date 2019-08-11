@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,6 +51,27 @@ public class ContentFragment extends Fragment {
         /* 设置适配器 */
         FoodCategoryAdapter foodCategoryAdapter = new FoodCategoryAdapter(foodCategoryList);
         rvContentFood.setAdapter(foodCategoryAdapter);
+        CardView cvContentSubOne = view.findViewById(R.id.cv_content_sub_one);
+        cvContentSubOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrl("http://106.15.39.96/media/url/question/main.html");
+            }
+        });
+        CardView cvContentSubTwo = view.findViewById(R.id.cv_content_sub_two);
+        cvContentSubTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrl("http://www.leighpeele.com/mifflin-st-jeor-calculator");
+            }
+        });
+        CardView cvContentSubThree = view.findViewById(R.id.cv_content_sub_three);
+        cvContentSubThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrl("http://www.guanjinco.com/buildersystem/");
+            }
+        });
         return view;
     }
 
@@ -61,19 +83,19 @@ public class ContentFragment extends Fragment {
     private void initializeBannerData() {
         bannerImagePath = new ArrayList<>();
         bannerImageTitle = new ArrayList<>();
-        bannerImagePath.add(R.drawable.ad1);
-        bannerImagePath.add(R.drawable.ad2);
-        bannerImagePath.add(R.drawable.ad3);
-        bannerImageTitle.add("");
-        bannerImageTitle.add("");
-        bannerImageTitle.add("");
+        bannerImagePath.add(R.drawable.banner1);
+        bannerImagePath.add(R.drawable.banner2);
+        bannerImagePath.add(R.drawable.banner3);
+        bannerImageTitle.add("每日推荐");
+        bannerImageTitle.add("低卡小贴士");
+        bannerImageTitle.add("加盟");
     }
 
     private void initializeBannerView(final View view) {
         BannerImageLoader bannerImageLoader = new BannerImageLoader();
         Banner banner = view.findViewById(R.id.banner_content);
         /* 设置样式，里面有很多种样式可以自己都看看效果 */
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
         /* 设置图片加载器 */
         banner.setImageLoader(bannerImageLoader);
         /* 设置轮播的动画效果,里面有很多种特效,可以都看看效果 */
@@ -94,12 +116,13 @@ public class ContentFragment extends Fragment {
             public void OnBannerClick(int position) {
                 switch (position) {
                     case 0:
-                        Intent intentOne = new Intent(view.getContext(), BannerOneActivity.class);
-                        startActivity(intentOne);
+                        openUrl("http://106.15.39.96/media/url/recommendation/main.html");
                         break;
                     case 1:
+                        openUrl("http://106.15.39.96/media/url/tips/main.html");
                         break;
                     case 2:
+                        openUrl("http://www.guanjinco.com/buildersystem/league.html");
                         break;
                         default:
                 }
@@ -118,6 +141,7 @@ public class ContentFragment extends Fragment {
                     .into(imageView);
         }
     }
+
     /** 初始化食材库分类列表 */
     private void initializeFoodCategory() {
         foodCategoryList = new ArrayList<>();
@@ -135,4 +159,10 @@ public class ContentFragment extends Fragment {
         foodCategoryList.add(new FoodCategory(bitmap6, "饮料"));
     }
 
+    /** 打开网页界面 */
+    public void openUrl(String url) {
+        Intent intent = new Intent(this.getContext(), UrlActivity.class);
+        intent.putExtra("url", url);
+        startActivity(intent);
+    }
 }

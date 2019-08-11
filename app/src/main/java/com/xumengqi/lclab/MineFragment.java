@@ -65,6 +65,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 case LOGIN_SUCCESSFULLY:
                     updateUserView();
                     LcLabToolkit.setUser(user);
+                    LcLabToolkit.setReadyToUpdateRecord(true);
                     break;
                 case LOGIN_FAILED_BY_NETWORK:
                     llMineWarning.setVisibility(View.VISIBLE);
@@ -77,6 +78,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     updateUserView();
                     LcLabToolkit.setUser(user);
                     LcLabToolkit.setReadyToUpdate(true);
+                    LcLabToolkit.setReadyToUpdateRecord(true);
                     break;
                 case MODIFIED_FAILED_BY_NETWORK:
                     LcLabToolkit.showToastHint(getContext(), "修改失败，网络异常", R.drawable.error);
@@ -415,6 +417,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 editor.remove("goal");
                 editor.apply();
                 LcLabToolkit.setUser(null);
+                LcLabToolkit.setReadyToUpdateRecord(true);
                 handler.sendMessage(theMessage(NOT_LOGIN));
             }
         });

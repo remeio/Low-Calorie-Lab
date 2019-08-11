@@ -848,7 +848,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
-                            android:text="去登录（注册）"
+                            android:text="登录"
                             android:textColor="@color/colorBold"
                             android:textSize="14sp" />
 

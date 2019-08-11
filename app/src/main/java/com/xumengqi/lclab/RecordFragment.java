@@ -15,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -288,8 +287,9 @@ public class RecordFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
+        if (!hidden && LcLabToolkit.isReadyToUpdateRecord()) {
             initializeRecordManager(getView());
+            LcLabToolkit.setReadyToUpdateRecord(false);
         }
     }
 

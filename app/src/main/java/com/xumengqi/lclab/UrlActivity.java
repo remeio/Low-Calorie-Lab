@@ -1,6 +1,7 @@
 package com.xumengqi.lclab;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -16,74 +17,80 @@ import android.widget.Toast;
  * @author xumengqi
  * @date 2019/08/09
  */
-public class BannerOneActivity extends BaseActivity {
-    private WebView wvBannerOneMain;
+public class UrlActivity extends BaseActivity {
+    private WebView wvUrlMain;
+    TextView tvBannerOneLoading;
     private Long exitTime = (long)0;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_banner_one);
+        setContentView(R.layout.activity_url);
+        tvBannerOneLoading = findViewById(R.id.tv_url_title);
+        /* 获取上个页面的传来的网址 */
+        Intent intent = getIntent();
+        String url = intent.getStringExtra("url");
 
-        wvBannerOneMain = findViewById(R.id.wv_banner_one_main);
-        wvBannerOneMain.setWebViewClient(new WebViewClient() {
+        /* 设置内置浏览器的相关配置 */
+        wvUrlMain = findViewById(R.id.wv_url_main);
+        wvUrlMain.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 view.loadUrl(request.getUrl().toString());
                 return true;
             }
         });
-        wvBannerOneMain.setWebChromeClient(new WebChromeClient() {
+        wvUrlMain.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 /* 设置标题 */
-                int maxLengthOfTitle = 15;
-                boolean isLongerThanTheMaximumLength = title.length() > maxLengthOfTitle;
-                TextView tvBannerOneLoading = findViewById(R.id.tv_banner_one_loading);
-                tvBannerOneLoading.setText((title.substring(0, isLongerThanTheMaximumLength ? maxLengthOfTitle : title.length()) + (isLongerThanTheMaximumLength ? "..." : "")));
+                tvBannerOneLoading.setText(title);
             }
         });
-        /* 配置信息 */
-        WebSettings webSettings = wvBannerOneMain.getSettings();
+        WebSettings webSettings = wvUrlMain.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
-        /* 加载网址 */
-        String url = "http://www.guanjinco.com/buildersystem/";
-        wvBannerOneMain.loadUrl(url);
+        /* 设置屏幕适应 */
+        webSettings.setUseWideViewPort(true);
+        webSettings.setLoadWithOverviewMode(true);
 
-        /* 设置返回键 */
-        ImageButton ibBannerOneBack = findViewById(R.id.ib_banner_one_back);
+        /* 加载网址 */
+        wvUrlMain.loadUrl(url);
+
+        /* 设置标题栏返回键 */
+        ImageButton ibBannerOneBack = findViewById(R.id.ib_url_back);
         ibBannerOneBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityCollector.finishActivity(BannerOneActivity.this);
+                ActivityCollector.finishActivity(UrlActivity.this);
             }
         });
-        /* 设置刷新功能 */
-        ImageButton ibBannerOneRefresh = findViewById(R.id.ib_banner_one_refresh);
+        /* 设置标题栏刷新功能 */
+        ImageButton ibBannerOneRefresh = findViewById(R.id.ib_url_refresh);
         ibBannerOneRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wvBannerOneMain.reload();
+                wvUrlMain.reload();
             }
         });
     }
 
     @Override
     public void onBackPressed() {
-        if (wvBannerOneMain.canGoBack()) {
-            wvBannerOneMain.goBack();
+        /* 重写返回键为后退和返回 */
+        if (wvUrlMain.canGoBack()) {
+            wvUrlMain.goBack();
         }
         else {
             int duration = 2000;
             if ((System.currentTimeMillis() - exitTime) > duration) {
-                Toast.makeText(BannerOneActivity.this, "再按一次返回主页", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UrlActivity.this, "再按一次返回主页", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             }
             else {
-                ActivityCollector.finishActivity(BannerOneActivity.this);
+                ActivityCollector.finishActivity(UrlActivity.this);
             }
         }
     }

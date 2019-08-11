@@ -311,6 +311,7 @@ class DatabaseConnector {
         final String url = "http://106.15.39.96/media/food_information_table_images/";
         String drawableName = "food_picture" + id;
         int resId = context.getResources().getIdentifier(drawableName , "drawable", Objects.requireNonNull(context).getPackageName());
+        /* 加载过多或过大图片会引起OOM */
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
         return bitmap == null ? getHttpBitmap(context, url + fileName + ".jpg") : bitmap;
     }
@@ -341,7 +342,7 @@ class DatabaseConnector {
         }
         if (bitmap == null) {
             return BitmapFactory.decodeResource(context.getResources(), R.drawable.load_picture_failed);
-    }
+        }
         else {
             return bitmap;
         }

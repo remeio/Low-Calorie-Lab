@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/ib_banner_one_back"
+            android:id="@+id/ib_url_back"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
@@ -25,17 +25,18 @@
             android:src="@drawable/back" />
 
         <TextView
-            android:id="@+id/tv_banner_one_loading"
+            android:id="@+id/tv_url_title"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="正在加载"
             android:textColor="@color/white"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:maxLines="1"/>
 
         <ImageButton
-            android:id="@+id/ib_banner_one_refresh"
+            android:id="@+id/ib_url_refresh"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
@@ -46,7 +47,7 @@
     </LinearLayout>
 
     <WebView
-        android:id="@+id/wv_banner_one_main"
+        android:id="@+id/wv_url_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -106,11 +106,6 @@ public class StoreFragment extends Fragment {
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 1);
         rvStoreDish.setLayoutManager(gridLayoutManager);
         /* 3.设置适配器，这一步放到Handler里面 */
-        /* 4.设置动画 */
-        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
-        defaultItemAnimator.setAddDuration(1000);
-        defaultItemAnimator.setRemoveDuration(1000);
-        rvStoreDish.setItemAnimator(defaultItemAnimator);
 
         /* 模块二：设置购物车菜品列表 */
         /* 打开购物车，每次点击都是一次新的执行 */
@@ -225,6 +220,10 @@ public class StoreFragment extends Fragment {
                 /* 发送正在加载信息，目的是给用户反馈 */
                 handler.sendMessage(theMessage(LOADING_DISH_LIST));
                 /* 加载数据 */
+                /* 用于解决OOM问题：所有图片都存在内存中，要及时释放内存 */
+                if (dishList != null) {
+                    dishList.clear();
+                }
                 dishList = new ArrayList<>();
                 DatabaseConnector databaseConnector = new DatabaseConnector(getContext());
                 databaseConnector.connectToDatabase();
@@ -264,6 +263,7 @@ public class StoreFragment extends Fragment {
                 new ThreadPoolExecutor.DiscardOldestPolicy());
         threadPool.execute(runnable);
         threadPool.shutdown();
+
     }
     
     /** 随机推荐算法 */
