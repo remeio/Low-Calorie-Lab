@@ -2,6 +2,8 @@ package com.xumengqi.lclab;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -10,6 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.util.Objects;
 
 /**
  * @author xumengqi
@@ -55,13 +62,35 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
         /* 2.设置组件的内容 */
         viewHolder.tvGoodsName.setText(goods.getName());
         viewHolder.tvGoodsPrice.setText(("¥" + goods.getPrice() * goods.getCount()));
-        viewHolder.ivGoodsPicture.setImageBitmap(goods.getPicture());
+        /* 图片加载优化 */
+        if (LcLabToolkit.isCacheNotRam()) {
+            viewHolder.ivGoodsPicture.setImageResource(R.drawable.loading_picture);
+            String drawableName = "food_picture" + goods.getId();
+            int resId = view.getContext().getResources().getIdentifier(drawableName , "drawable", Objects.requireNonNull(view.getContext()).getPackageName());
+            Bitmap bitmap = BitmapFactory.decodeResource(view.getContext().getResources(), resId);
+            if (bitmap != null) {
+                Glide.with(view)
+                        .load(resId)
+                        .into(viewHolder.ivGoodsPicture);
+            }
+            else {
+                String url = "http://106.15.39.96/media/food_information_table_images/";
+                Glide.with(view)
+                        .load(url + goods.getName() + ".jpg")
+                        .apply(new RequestOptions().error(R.drawable.load_picture_failed))
+                        .into(viewHolder.ivGoodsPicture);
+            }
+        }
+        else {
+            viewHolder.ivGoodsPicture.setImageBitmap(goods.getPicture());
+        }
+
         viewHolder.tvGoodsAmount.setText((goods.getCount() + ""));
         /* 3.设置组件的功能 */
         viewHolder.tvGoodsName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                /* 此处可设置点击商品名称跳到详细界面 */
             }
         });
         /* 将当前被点击菜品数量加一 */
@@ -133,5 +162,4 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.ViewHolder> 
         /* 刷新布局 */
         notifyDataSetChanged();
     }
-
 }

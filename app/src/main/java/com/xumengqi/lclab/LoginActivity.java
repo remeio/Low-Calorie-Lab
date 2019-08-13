@@ -84,6 +84,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         ImageButton ibLoginBack = findViewById(R.id.ib_login_back);
         ibLoginBack.setOnClickListener(this);
 
+        /* 初始化进度条 */
         initializeProgressDialog();
     }
 
@@ -192,6 +193,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         threadPool.shutdown();
     }
 
+    /**
+     * 判断注册的账户及密码格式是否是合法的
+     * @param account 账户
+     * @param password 密码
+     * @return 合法与否
+     */
     public boolean isValidInputForRegistering(String account, String password) {
         final int accountLength = 11, minLengthOfPassword = 6;
         if (account.length() != accountLength) {

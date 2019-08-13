@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -95,9 +94,7 @@ public class StoreFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        /* 加载帧视图 */
         final View view = inflater.inflate(R.layout.fragment_store, container, false);
-
         /* 模块一：设置商城菜品列表 */
         /* 1.初始化菜品列表 */
         initializeDishList();
@@ -107,8 +104,8 @@ public class StoreFragment extends Fragment {
         rvStoreDish.setLayoutManager(gridLayoutManager);
         /* 3.设置适配器，这一步放到Handler里面 */
 
-        /* 模块二：设置购物车菜品列表 */
-        /* 打开购物车，每次点击都是一次新的执行 */
+        /* 模块二：设置购物车商品列表 */
+        /* 打开购物车 */
         cvStoreShoppingCart = view.findViewById(R.id.cv_store_shopping_cart);
         cvStoreShoppingCart.setVisibility(View.GONE);
         cvStoreShoppingCart.setOnClickListener(new View.OnClickListener() {
@@ -207,11 +204,12 @@ public class StoreFragment extends Fragment {
 
             }
         });
-
         return view;
     }
 
-    /** 初始化菜品列表 */
+    /**
+     * 初始化菜品列表
+     */
     public void initializeDishList() {
         /* 网络操作必须在线程中进行 */
         Runnable runnable = new Runnable() {
@@ -220,7 +218,7 @@ public class StoreFragment extends Fragment {
                 /* 发送正在加载信息，目的是给用户反馈 */
                 handler.sendMessage(theMessage(LOADING_DISH_LIST));
                 /* 加载数据 */
-                /* 用于解决OOM问题：所有图片都存在内存中，要及时释放内存 */
+                /* 用于解决OOM问题：所有图片都存在内存中，所以要及时释放内存 */
                 if (dishList != null) {
                     dishList.clear();
                 }
@@ -265,8 +263,13 @@ public class StoreFragment extends Fragment {
         threadPool.shutdown();
 
     }
-    
-    /** 随机推荐算法 */
+
+    /**
+     * 随机推荐算法
+     * @param user 用户
+     * @param dishList 菜品列表
+     * @return 推荐的几个菜品
+     */
     private List<Dish> getRecommendedDish(User user, List<Dish> dishList) {
         String goal = (user == null ? null : user.getDietaryTarget());
         String fatLoss = "减脂", muscleGain = "增肌";
@@ -313,19 +316,32 @@ public class StoreFragment extends Fragment {
         }
     }
 
-    /** 移动RecyclerView中的项到指定位置 */
+    /**
+     * 移动RecyclerView中的项到指定位置
+     * @param gridLayoutManager 布局管理
+     * @param mRecyclerView 列表
+     * @param n 要移动到的项的位置
+     */
     public static void moveToPosition(GridLayoutManager gridLayoutManager, RecyclerView mRecyclerView, int n) {
         mRecyclerView.scrollToPosition(n);
         gridLayoutManager.scrollToPositionWithOffset(n, 0);
     }
+
+    /**
+     * 便于发送信息
+     * @param what 信息内容
+     * @return 信息
+     */
     private Message theMessage(int what) {
         Message message = new Message();
         message.what = what;
         return message;
     }
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        /* 用于检查用户数据是否被更新，如果用户数据被更新，则刷新菜品数据 */
         if (!hidden && LcLabToolkit.isReadyToUpdate()) {
             initializeDishList();
             LcLabToolkit.setReadyToUpdate(false);

@@ -96,4 +96,3 @@ class Dish {
         return notes;
     }
 }
-

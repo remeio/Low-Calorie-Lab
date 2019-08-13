@@ -98,6 +98,7 @@ public class RecordFragment extends Fragment {
             }
         });
 
+        /* 设置清空图标的功能 */
         ImageButton ibRecordCleanAll = view.findViewById(R.id.ib_record_clean_all);
         ibRecordCleanAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +127,9 @@ public class RecordFragment extends Fragment {
         return view;
     }
 
-    /** 来添加一条记录 */
+    /**
+     * 来添加一条记录
+     */
     private void showAddDialog() {
         final EditText editText = new EditText(getContext());
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -156,7 +159,12 @@ public class RecordFragment extends Fragment {
         builder.create().show();
     }
 
-    /** 画图 */
+    /**
+     * 设置健康管理模块，并画图
+     * @param view 视图
+     * @param recordList 记录列表
+     * @param numberOfPoints 图上点的个数
+     */
     public void drawRecord(View view, List<Record> recordList, int numberOfPoints) {
         /* 设置低卡记录 */
         initializeRecordManager(view);
@@ -208,7 +216,11 @@ public class RecordFragment extends Fragment {
         yAxis.setGranularity(500f);
     }
 
-    /** 从本地数据库获取记录列表 */
+    /**
+     * 从本地数据库获取记录列表
+     * @param context 上下文
+     * @return 记录列表
+     */
     public List<Record> getRecordList(Context context) {
         List<Record> recordList = new ArrayList<>();
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -225,7 +237,11 @@ public class RecordFragment extends Fragment {
         return recordList;
     }
 
-    /** 向本地数据库中插入一条记录 */
+    /**
+     * 向本地数据库中插入一条记录
+     * @param context 上下文
+     * @param record 要插入的记录
+     */
     public void invertRecord(Context context, Record record) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase sqLiteDatabase = databaseHelper.getReadableDatabase();
@@ -237,6 +253,10 @@ public class RecordFragment extends Fragment {
         databaseHelper.close();
     }
 
+    /**
+     * 清空所有记录
+     * @param context 上下文
+     */
     public void cleanAllRecord(Context context) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         SQLiteDatabase sqLiteDatabase = databaseHelper.getReadableDatabase();
@@ -245,7 +265,10 @@ public class RecordFragment extends Fragment {
         databaseHelper.close();
     }
 
-    /** 设置个人健康管理 */
+    /**
+     * 设置个人健康管理
+     * @param view 视图
+     */
     public void initializeRecordManager(View view) {
         User user = LcLabToolkit.getUser();
         int calorieRecommend =  computeCalorieForUser(user);
@@ -287,6 +310,7 @@ public class RecordFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        /* 用于检查用户数据是否被更新，如果用户数据被更新，则刷新低卡记录数据 */
         if (!hidden && LcLabToolkit.isReadyToUpdateRecord()) {
             initializeRecordManager(getView());
             LcLabToolkit.setReadyToUpdateRecord(false);

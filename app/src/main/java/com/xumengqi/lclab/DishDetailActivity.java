@@ -105,15 +105,6 @@ public class DishDetailActivity extends BaseActivity {
         llDishDetail = findViewById(R.id.ll_dish_detail);
         pbDishDetailLoad = findViewById(R.id.pb_dish_detail_load);
         ivDishDetailLoad = findViewById(R.id.iv_dish_detail_load);
-        /* 设置返回键的功能 */
-        ImageButton ibDishBack = findViewById(R.id.ib_dish_detail_back);
-        ibDishBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /* 结束当前页面 */
-                ActivityCollector.finishActivity(DishDetailActivity.this);
-            }
-        });
         /* 获取上个界面传来的值，默认值为101 */
         Intent intent = getIntent();
         final int idOfDishFromLastIntent = intent.getIntExtra("id_of_dish", 101);
@@ -149,5 +140,15 @@ public class DishDetailActivity extends BaseActivity {
                 new ThreadPoolExecutor.DiscardOldestPolicy());
         threadPool.execute(runnable);
         threadPool.shutdown();
+
+        /* 设置返回键的功能 */
+        ImageButton ibDishBack = findViewById(R.id.ib_dish_detail_back);
+        ibDishBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /* 结束当前页面 */
+                ActivityCollector.finishActivity(DishDetailActivity.this);
+            }
+        });
     }
 }

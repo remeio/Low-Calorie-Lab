@@ -51,4 +51,3 @@ class Food {
         return notes;
     }
 }
-

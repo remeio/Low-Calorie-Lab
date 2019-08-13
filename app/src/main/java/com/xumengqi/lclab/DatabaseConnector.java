@@ -24,7 +24,7 @@ import java.util.Objects;
  * 此类将保证从此类获取到的数据的有效性，一切数据加载异常都由此类处理，即外部类获取的数据是默认有效的，故不做异常处理
  * 使用须知：
  * 1.需要在 build.gradle 中添加 implementation 'mysql:mysql-connector-java:5.1.18'
- * 2.需要获取网络全权限 <uses-permission android:name="android.permission.INTERNET"/>，高版本手机需要设置额外网络权限;
+ * 2.需要获取网络全权限 <uses-permission android:name="android.permission.INTERNET"/>，高版本手机需要设置额外网络权限cleartextTrafficPermitted="true";
  * 3.需要当前数据库登录账户是有相关权限的
  * 4.Logcat 用 Info 搜索 DatabaseConnector_xmq
  * Last Modified：2019/08/05 by徐梦旗 2663479778@qq.com
@@ -91,7 +91,7 @@ class DatabaseConnector {
                             resultSet.getInt("id"),
                             resultSet.getString("name"),
                             /* 获取图片 */
-                            getPictureByIdOrUrl(context, resultSet.getInt("id"), resultSet.getString("name")),
+                            LcLabToolkit.isCacheNotRam() ?  null : getPictureByIdOrUrl(context, resultSet.getInt("id"), resultSet.getString("name")),
                             resultSet.getDouble("price"),
                             resultSet.getDouble("calorie_k_calorie"),
                             resultSet.getString("category"),

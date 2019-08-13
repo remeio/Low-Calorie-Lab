@@ -52,6 +52,7 @@ public class UrlActivity extends BaseActivity {
         WebSettings webSettings = wvUrlMain.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
+
         /* 设置屏幕适应 */
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);

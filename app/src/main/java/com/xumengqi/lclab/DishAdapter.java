@@ -2,6 +2,7 @@ package com.xumengqi.lclab;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author xumengqi
@@ -73,7 +78,29 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
         viewHolder.tvDishPrice.setText(("¥" + dish.getPrice()));
         viewHolder.tvDishCategory.setText(dish.getCategory());
         viewHolder.tvDishCalorie.setText((dish.getCalorie() + "千卡"));
-        viewHolder.ivDish.setImageBitmap(dish.getPicture());
+        /* 图片加载优化 */
+        if (LcLabToolkit.isCacheNotRam()) {
+            viewHolder.ivDish.setImageResource(R.drawable.loading_picture);
+            String drawableName = "food_picture" + dish.getId();
+            int resId = view.getContext().getResources().getIdentifier(drawableName , "drawable", Objects.requireNonNull(view.getContext()).getPackageName());
+            Bitmap bitmap = BitmapFactory.decodeResource(view.getContext().getResources(), resId);
+            if (bitmap != null) {
+                Glide.with(view)
+                        .load(resId)
+                        .into(viewHolder.ivDish);
+            }
+            else {
+                String url = "http://106.15.39.96/media/food_information_table_images/";
+                Glide.with(view)
+                        .load(url + dish.getName() + ".jpg")
+                        .apply(new RequestOptions().error(R.drawable.load_picture_failed))
+                        .into(viewHolder.ivDish);
+            }
+        }
+        else {
+            viewHolder.ivDish.setImageBitmap(dish.getPicture());
+        }
+
         /* 3.设置组件的功能 */
         /* 将被点击菜品加入购物车 */
         viewHolder.ibDishAddDish.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +136,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
         return dishList.size();
     }
 
-    /** 用于解决对某一项进行操作，其他项会改变的问题*/
+    /** 用于解决对某一项进行操作，其他项会改变的问题 */
     @Override
     public int getItemViewType(int position) {
         return position;

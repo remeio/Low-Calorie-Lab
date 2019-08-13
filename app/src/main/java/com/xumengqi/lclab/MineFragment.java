@@ -238,11 +238,17 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * 便于发送信息
+     * @param what 信息的内容
+     * @return 信息
+     */
     private Message theMessage(int what) {
         Message message = new Message();
         message.what = what;
         return message;
     }
+
     private void showHeightDialog() {
         final EditText editText = new EditText(getContext());
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -271,6 +277,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         builder.setNegativeButton("取消", null);
         builder.create().show();
     }
+
     private void showWeightDialog() {
         final EditText editText = new EditText(getContext());
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -298,6 +305,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         builder.setNegativeButton("取消", null);
         builder.create().show();
     }
+
     private void showSexDialog(){
         final String[] items = {"男", "女"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -341,6 +349,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 mYear, mMonth, mDay);
         datePickerDialog.show();
     }
+
     private void showWhrDialog() {
         final EditText editText = new EditText(getContext());
         editText.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -369,6 +378,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         builder.setNegativeButton("取消", null);
         builder.create().show();
     }
+
     private void showExerciseDialog(){
         final String[] items = {"从不运动", "每周1~3次", "每周3~5次", "每周6~7次"};
         AlertDialog.Builder listDialog = new AlertDialog.Builder(getContext());
@@ -403,6 +413,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         });
         listDialog.show();
     }
+
     private void showLogoutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("是否注销该账户");
@@ -440,6 +451,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 databaseConnector.closeDatabase();
             }
         };
+        /* 使用线程池，便于管理 */
         ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
                 1,1,10, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<Runnable>(1),
@@ -448,6 +460,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         threadPool.shutdown();
     }
 
+    /**
+     * 更新用户视图
+     */
     public void updateUserView() {
         tvMineAccount.setText(account);
         if (user.getHeight() != 0) {
