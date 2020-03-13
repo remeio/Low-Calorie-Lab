@@ -100,7 +100,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         /* 加载帧视图 */
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
-
         llMineNotLogin = view.findViewById(R.id.ll_mine_not_login);
         svMineLogin = view.findViewById(R.id.sv_mine_login);
         tvMineAccount = view.findViewById(R.id.tv_mine_account);

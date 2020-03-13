@@ -22,7 +22,7 @@ public class MainActivity extends BaseActivity {
     /** 代表所有帧的下标，不能修改 */
     private final int ONE_FRAGMENT = 0, TWO_FRAGMENT = 1, THREE_FRAGMENT = 2, FOUR_FRAGMENT = 3;
     /** 用于记录按下返回键的时刻 */
-    private Long exitTime = (long)0;
+    private Long exitTime = (long) 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

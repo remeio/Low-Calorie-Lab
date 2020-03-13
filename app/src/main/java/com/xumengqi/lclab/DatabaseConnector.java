@@ -51,6 +51,11 @@ class DatabaseConnector {
     void connectToDatabase() {
         notifyState("正在连接数据库<" + DATABASE + ">...");
         try {
+            Class.forName("com.sql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,7 +71,8 @@ class DatabaseConnector {
     void closeDatabase() {
         if (connection == null) {
             notifyState("没有连接上数据库，所以没必要关闭数据库<" + DATABASE + ")");
-        } else {
+        }
+        else {
             try {
                 connection.close();
             } catch (SQLException e) {
