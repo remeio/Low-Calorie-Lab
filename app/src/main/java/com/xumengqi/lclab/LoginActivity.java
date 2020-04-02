@@ -170,6 +170,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     editor.putString("account", accountRegister);
                     editor.putString("password", passwordRegister);
                     editor.apply();
+                    editor.commit();
                     /* 注册成功 */
                     handler.sendMessage(theMessage(REGISTER_SUCCESSFULLY));
                 }
